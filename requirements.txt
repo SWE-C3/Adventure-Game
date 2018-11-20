@@ -1,0 +1,2 @@
+https://download.lfd.uci.edu/pythonlibs/h2ufg7oq/curses-2.2-cp37-cp37m-win32.whl
+autopep8
