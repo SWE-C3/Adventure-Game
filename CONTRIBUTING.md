@@ -24,7 +24,7 @@
     ```
   - Linux
     ```bash
-    venv/bin/activate
+    . venv/bin/activate
     ```
 - Install the project requirements
   ```bash
