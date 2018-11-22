@@ -30,6 +30,15 @@
   ```bash
   pip install -r requirements.txt
   ```
+- (Only on Windows systems) Install Windows-specific requirements
+  - For 32-bit Python version
+    ```bash
+    pip install -r requirements-win32.txt
+    ```
+  - For 64-bit Python version
+    ```bash
+    pip install -r requirements-win64.txt
+    ```
   
 ## Developing
 
