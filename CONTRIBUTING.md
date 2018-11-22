@@ -51,6 +51,8 @@ to push to the main repository, do the following:
   autopep8 . --recursive --in-place --exclude venv
   ```
 - create a pull request at the main repository
+- if your pull request relates to an open issue add `fixes #<issue_id>`
+  to the comment body of the pull request
 
 ## Documentation
 
