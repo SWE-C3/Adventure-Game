@@ -52,3 +52,9 @@ to push to the main repository, do the following:
   ```
 - create a pull request at the main repository
 
+## Documentation
+
+Documentation for the `curses` library can be found [at the
+official website](https://docs.python.org/3/library/curses.html#module-curses),
+as well as [a tutorial](https://docs.python.org/3/howto/curses.html)
+on how to use it.
