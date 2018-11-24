@@ -24,4 +24,4 @@ jobs:
           name: format code
           command: |
             . venv/bin/activate
-            autopep8 . --recursive --in-place --exclude venv
+            pylint --rcfile=setup.cfg src
