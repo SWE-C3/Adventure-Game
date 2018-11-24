@@ -6,6 +6,10 @@ jobs:
 
     working_directory: ~/repo
 
+    branches:
+      only:
+        - ci
+
     steps:
       - checkout
 
