@@ -1,3 +1,6 @@
+"""
+Interfaces for help menus
+"""
 import curses
 import json
 from os.path import join, abspath, dirname
@@ -6,6 +9,9 @@ from utility import draw_table_centered
 
 
 class ControlsInventory:
+    """
+    Help menu for inventory
+    """
 
     def __init__(self, stdscr):
         self.stdscr = stdscr
@@ -14,6 +20,9 @@ class ControlsInventory:
             self.items = json.load(items)['inventory']
 
     def print_screen(self):
+        """
+        print interface to window
+        """
         self.stdscr.clear()
         height, width = self.stdscr.getmaxyx()
         window = curses.newwin(height, width, 0, 0)
