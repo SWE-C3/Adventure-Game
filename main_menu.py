@@ -13,9 +13,7 @@ def Credits():
     return "Credits"
 
 def SaveFile():
-    return "SaveFile.txt"
-
-saveExists = os.path.exists("SaveFile.txt")
+    return True
 
 class main_menu:
     def __init__(self, screen):
@@ -27,7 +25,7 @@ class main_menu:
                      "  ||:  .|  ", "  ||:   |  ", "  ||: , |  ", "  ||:   |  ",
                      "  ||:   |  ", "  ||: . |  ", "  ||_   |  ", " ", " "]
 
-        if saveExists:
+        if SaveFile():
             self.menu_items = ["[n] Neues Spiel", "[f] Fortsetzen", "[b] Beenden"]
         else:
             self.menu_items = ["[n] Neues Spiel", "[b] Beenden"]
@@ -118,32 +116,3 @@ class end_game_window:
 
         end_item_win.refresh()                                      # refresh menu_item_win
         self.pressed_key = read_input(end_item_win)                 # wait for pressing a key
-
-main_screen = curses.initscr()
-m_menu = main_menu(main_screen)
-n_game = new_game_window(main_screen)
-e_game = end_game_window(main_screen)
-
-# look which key is pressed in m_menu
-while m_menu.pressed_key != ord('q'):								 # check pressed key in main_menu
-    m_menu.print()													 # print main_menu
-    if m_menu.pressed_key == ord('n'):
-        if saveExists:
-            n_game.print()
-            while n_game.pressed_key != ord('n'):                        # check pressed key in new_game_window
-                n_game.print()                                           # print new_game_window
-                if n_game.pressed_key == ord('j'):                       # if 'j' is pressed in new_game_window
-                    Story()
-        else:
-            Story()
-    elif m_menu.pressed_key == ord('b'):							 # else if 'c' pressed in test_menu
-        e_game.print()												 # then print test_con_window
-        while e_game.pressed_key != ord('n'):                        # check pressed key in new_game_window
-            e_game.print()                                           # print end_game_window
-            if e_game.pressed_key == ord('j'):                       # if 'n' is pressed in new_game_window
-                exit()                                               # then print main_menu
-    elif m_menu.pressed_key == ord('c'):
-        Credits()
-    elif saveExists:
-        if m_menu.pressed_key == ord('f'):						     # if 'p' pressed in test_menu
-            GameMap()                                            # then go to Game Map
