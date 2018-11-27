@@ -1,0 +1,27 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7.1
+
+    working_directory: ~/repo
+
+    branches:
+      only:
+        - ci
+
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      - run:
+          name: linting
+          command: |
+            . venv/bin/activate
+            pylint --rcfile=setup.cfg src
