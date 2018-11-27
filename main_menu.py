@@ -5,11 +5,11 @@ def read_input(window):
     return window.getch()
 
 
-def SaveFile():
+def save_file():
     return True
 
 
-class main_menu:
+class MainMenu:
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
@@ -19,7 +19,7 @@ class main_menu:
                      "  ||:  .|  ", "  ||:   |  ", "  ||: , |  ", "  ||:   |  ",
                      "  ||:   |  ", "  ||: . |  ", "  ||_   |  ", " ", " "]
 
-        if SaveFile():
+        if save_file():
             self.menu_items = ["[n] Neues Spiel",
                                "[f] Fortsetzen", "[b] Beenden"]
         else:
@@ -34,31 +34,32 @@ class main_menu:
 
         # create new window for menu
         menu_item_win = curses.newwin(size[0], size[1], 0, 0)
-        # yPosOffset to set items vertical below each other
-        yPosOffset = int(size[0] / 7) - 2
+        # y_pos_offset to set items vertical below each other
+        y_pos_offset = int(size[0] / 7) - 2
 
-        menu_item_win.addstr(yPosOffset, int(
+        #
+        menu_item_win.addstr(y_pos_offset, int(
             size[1] / 2) - int(len(self.top) / 2), self.top)
-        yPosOffset += 3
+        # increment y_pos_offset by one
+        y_pos_offset += 3
 
-        # for each item in menu_items add the menu text
+        # for each item in menu_logo add the menu text
         for item in self.logo:
-            menu_item_win.addstr(yPosOffset, int(
+            menu_item_win.addstr(y_pos_offset, int(
                 size[1] / 2) - int(len(item) / 2), item)
-            # increment yPosOffset by one
-            yPosOffset += 1
+            y_pos_offset += 1
 
         # for each item in menu_items add the menu text
         for item in self.menu_items:
-            menu_item_win.addstr(yPosOffset, int(
+            menu_item_win.addstr(y_pos_offset, int(
                 size[1] / 2) - int(len(item) / 2), item)
-            # increment yPosOffset by one
-            yPosOffset += 1
+            # increment y_pos_offset by one
+            y_pos_offset += 1
 
-        yPosOffset += 1
-        menu_item_win.addstr(yPosOffset, int(
+        y_pos_offset += 1
+        menu_item_win.addstr(y_pos_offset, int(
             size[1] / 2) - int(len(self.credits) / 2), self.credits)
-        yPosOffset += 1
+        y_pos_offset += 1
 
         # refresh menu_item_win
         menu_item_win.refresh()
@@ -66,7 +67,7 @@ class main_menu:
         self.pressed_key = read_input(menu_item_win)
 
 
-class new_game_window:
+class NewGameWindow:
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
@@ -81,25 +82,25 @@ class new_game_window:
 
         # create new window for menu
         new_item_win = curses.newwin(size[0], size[1], 0, 0)
-        # yPosOffset to set items vertical below each other
-        yPosOffset = int(size[0] / 2) - 2
+        # y_pos_offset to set items vertical below each other
+        y_pos_offset = int(size[0] / 2) - 2
 
-        new_item_win.addstr(yPosOffset, int(
+        new_item_win.addstr(y_pos_offset, int(
             size[1] / 2) - int(len(self.text1) / 2), self.text1)
-        yPosOffset += 1
-        new_item_win.addstr(yPosOffset, int(
+        y_pos_offset += 1
+        new_item_win.addstr(y_pos_offset, int(
             size[1] / 2) - int(len(self.text2) / 2), self.text2)
-        yPosOffset += 1
-        new_item_win.addstr(yPosOffset, int(
+        y_pos_offset += 1
+        new_item_win.addstr(y_pos_offset, int(
             size[1] / 2) - int(len(self.text3) / 2), self.text3)
-        yPosOffset += 1
+        y_pos_offset += 1
 
         # for each item in menu_items add the menu text
         for item in self.menu_items:
-            new_item_win.addstr(yPosOffset, int(
+            new_item_win.addstr(y_pos_offset, int(
                 size[1] / 2) - int(len(item) / 2), item)
-            # increment yPosOffset by one
-            yPosOffset += 1
+            # increment y_pos_offset by one
+            y_pos_offset += 1
 
         # refresh menu_item_win
         new_item_win.refresh()
@@ -107,7 +108,7 @@ class new_game_window:
         self.pressed_key = read_input(new_item_win)
 
 
-class end_game_window:
+class EndGameWindow:
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
