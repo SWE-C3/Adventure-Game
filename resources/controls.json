@@ -25,5 +25,42 @@
       "secondary_key": "",
       "action": "open this menu"
     }
+  ],
+  "game_map": [
+    {
+      "primary_key": "W",
+      "secondary_key": "UP",
+      "action": "move north"
+    },
+    {
+      "primary_key": "A",
+      "secondary_key": "LEFT",
+      "action": "move west"
+    },
+    {
+      "primary_key": "S",
+      "secondary_key": "DOWN",
+      "action": "move south"
+    },
+    {
+      "primary_key": "D",
+      "secondary_key": "RIGHT",
+      "action": "move east"
+    },
+    {
+      "primary_key": "I",
+      "secondary_key": "",
+      "action": "open inventory"
+    },
+    {
+      "primary_key": "ESC",
+      "secondary_key": "",
+      "action": "open pause menu"
+    },
+    {
+      "primary_key": "H",
+      "secondary_key": "",
+      "action": "open this menu"
+    }
   ]
 }
