@@ -1,0 +1,29 @@
+{
+  "inventory": [
+    {
+      "primary_key": "1",
+      "secondary_key": "",
+      "action": "use slot 1"
+    },
+    {
+      "primary_key": "2",
+      "secondary_key": "",
+      "action": "use slot 2"
+    },
+    {
+      "primary_key": "3",
+      "secondary_key": "",
+      "action": "use slot 3"
+    },
+    {
+      "primary_key": "I",
+      "secondary_key": "",
+      "action": "close inventory"
+    },
+    {
+      "primary_key": "H",
+      "secondary_key": "",
+      "action": "open this menu"
+    }
+  ]
+}
