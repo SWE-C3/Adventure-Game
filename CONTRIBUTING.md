@@ -24,12 +24,21 @@
     ```
   - Linux
     ```bash
-    venv/bin/activate
+    . venv/bin/activate
     ```
 - Install the project requirements
   ```bash
   pip install -r requirements.txt
   ```
+- (Only on Windows systems) Install Windows-specific requirements
+  - For 32-bit Python version
+    ```bash
+    pip install -r requirements-win32.txt
+    ```
+  - For 64-bit Python version
+    ```bash
+    pip install -r requirements-win64.txt
+    ```
   
 ## Developing
 
@@ -42,4 +51,12 @@ to push to the main repository, do the following:
   autopep8 . --recursive --in-place --exclude venv
   ```
 - create a pull request at the main repository
+- if your pull request relates to an open issue add `fixes #<issue_id>`
+  to the comment body of the pull request
 
+## Documentation
+
+Documentation for the `curses` library can be found [at the
+official website](https://docs.python.org/3/library/curses.html#module-curses),
+as well as [a tutorial](https://docs.python.org/3/howto/curses.html)
+on how to use it.
