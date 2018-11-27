@@ -21,10 +21,13 @@ def draw_table_centered(window, headers: list, items: dict):
     y_pos = height // 2 - len(items) // 2 - 1
     x_pos = width // 2 - (sum(max_column_lengths) + 10) // 2
 
-    separator = f'+-{"-+-".join("-" * length for length in max_column_lengths)}-+'
+    separator = '+-'
+    separator += '-+-'.join("-" * length for length in max_column_lengths)
+    separator += '-+'
 
     def template(values):
-        columns = [f'{value:^{max_column_lengths[index]}}' for index, value in enumerate(values)]
+        columns = [f'{value:^{max_column_lengths[index]}}'
+                   for index, value in enumerate(values)]
         return f'| {" | ".join(columns)} |'
 
     window.addstr(y_pos - 3, x_pos, separator)
