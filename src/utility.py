@@ -19,7 +19,9 @@ def draw_table_centered(window, headers: list, items: dict):
         )
     height, width = window.getmaxyx()
     y_pos = height // 2 - len(items) // 2 - 1
-    x_pos = width // 2 - (sum(max_column_lengths) + 10) // 2
+    x_pos = width // 2 - (sum(max_column_lengths)
+                          + 3 * len(max_column_lengths)
+                          + 1) // 2
 
     separator = '+-'
     separator += '-+-'.join("-" * length for length in max_column_lengths)
