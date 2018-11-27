@@ -10,7 +10,7 @@ class GameMap:
         #         - inventory
         #         - help
         #         - move Player
-        self.events = { }
+        self.events = {}
         # Event log window
         self.event_log = ""
 
@@ -21,11 +21,12 @@ class GameMap:
         # self.player.current_level.name (?)
         game_map_win.addstr(1, 3, "Ebene {number}" + self.player + self.tower)
         map_window = curses.newwin(int(screen_size[0] * 0.66) - 1,
-                            int(screen_size[1] - 5), 2, 3)
+                                   int(screen_size[1] - 5), 2, 3)
         map_window.border()
         map_size = map_window.getmaxyx()
         # self.player.current_level.print
-        map_window.addstr(int(map_size[0] / 2), int(map_size[1] / 2) - 7, "{current level}")
+        map_window.addstr(
+            int(map_size[0] / 2), int(map_size[1] / 2) - 7, "{current level}")
         # self.player.health
         health_bar_window = curses.newwin(3, 23, map_size[0] + 2, 3)
         health_bar_window.border()
@@ -34,7 +35,8 @@ class GameMap:
         health_bar_window.addstr(1, 17, "100")
         # game_map_win.addstr(map_size[0] + 2, 3, "HP: " + self.DrawHealthBar(50) + " 50")
         # self.player.power
-        game_map_win.addstr(map_size[0] + 3, map_size[1] - 14, "Stärke: {value}")
+        game_map_win.addstr(
+            map_size[0] + 3, map_size[1] - 14, "Stärke: {value}")
         self.event_log = curses.newwin(screen_size[0] - (map_size[0] + 6),
                                        screen_size[1] - 5,
                                        map_size[0] + 5,
