@@ -8,16 +8,16 @@ from os.path import join, abspath, dirname
 from utility import draw_table_centered
 
 
-class ControlsInventory:
+class Controls:
     """
-    Help menu for inventory
+    Help menu for inventory and game map
     """
 
-    def __init__(self, stdscr):
+    def __init__(self, stdscr, menu_type: str):
         self.stdscr = stdscr
         with open(join(dirname(abspath(__file__)), '..', 'resources',
                        'controls.json')) as items:
-            self.items = json.load(items)['inventory']
+            self.items = json.load(items)[menu_type]
 
     def print_screen(self):
         """
