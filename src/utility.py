@@ -1,4 +1,17 @@
+"""
+Utility module for reusable functions
+"""
+
+
 def draw_table_centered(window, headers: list, items: dict):
+    """
+    draw a centered table in the specified window
+    :param window: window to be drawn to
+    :param headers: header row values
+    :param items: table items as a dict, dict must have same amount of
+                  key-value pairs as there are items in headers
+    :return:
+    """
     max_column_lengths = list()
     for header, key in zip(headers, items[0].keys()):
         max_column_lengths.append(
