@@ -19,7 +19,7 @@ class Controls:
                        'controls.json')) as items:
             self.items = json.load(items)[menu_type]
 
-    def print_screen(self):
+    def print(self):
         """
         print interface to window
         """
