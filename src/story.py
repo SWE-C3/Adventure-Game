@@ -1,4 +1,5 @@
 import curses
+import textwrap
 
 def read_input(window):
     return window.getch()
@@ -13,24 +14,34 @@ class StoryScreen:
         self.screen.clear() 
         screen_size = self.screen.getmaxyx()
         story_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
-        story_win.addstr(1, 1, "Story 1")
+        story_win.addstr(1, 1, "Story Name")
     
-        story = curses.newwin(int(screen_size[0] * 0.66),
-                        int(screen_size[1] - 5), 2, 3)
-        story.border()
-        story_size = story.getmaxyx()
-        story.addstr(int(1), int(1), "Lorem ipsum dolor sit amet, consetetur sadipscing elitr") 
+        story_wrapper = curses.newwin(int(screen_size[0] * 0.66), int(screen_size[1] - 5), 2, 3)
+        story_wrapper_screen_size = story_wrapper.getmaxyx()
+        story_wrapper.border()
+        
+        text = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. "
+        
+        story = curses.newwin(int(story_wrapper_screen_size[0] * 0.80), int(story_wrapper_screen_size[1] - 7), 3, 6)
+        story.addstr(1, 0, textwrap.fill(text, 750)) 
+        #story.addstr(1,0, text)
     
         #story_win.addstr(map_size[0] + 2, map_size[1] - 10, "Weiter (w)") 
     
         story_win.refresh()
+        story_wrapper.refresh()
         story.refresh()
     
         self.pressed_key = read_input(story_win)
     
     
 # init screen
-screen = curses.initscr()   
+screen = curses.initscr() 
+# no echo of inputs
+curses.noecho()
+# hide the cursor
+curses.curs_set(False)
+  
 s_screen = StoryScreen(screen)	    
     
     
