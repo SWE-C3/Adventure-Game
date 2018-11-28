@@ -13,6 +13,7 @@ class GameMap:
     def __init__(self, player, tower):
         self.player = player
         self.tower = tower
+        self.health_bar = "||||||||||"
         # Events: - pause
         #         - inventory
         #         - help
@@ -41,7 +42,7 @@ class GameMap:
         health_bar_window = curses.newwin(3, 23, map_size[0] + 2, 3)
         health_bar_window.border()
         health_bar_window.addstr(1, 2, "HP: ")
-        health_bar_window.addstr(1, 6, self.draw_health_bar(40))
+        health_bar_window.addstr(1, 6, self.build_health_bar(40))
         health_bar_window.addstr(1, 17, "100")
         # self.player.power
         game_map_win.addstr(
@@ -70,19 +71,15 @@ class GameMap:
             event()
 
     # Draw the health bar based on current player.health
-    def draw_health_bar(self, health):
+    def update_health_bar(self, health):
         """
-        create health bar based on current health
-        :return: health bar string
+        update health bar based on current health
         """
-        # start with full life
-        health_bar = "||||||||||"
         # cut one "|" off for each 10th between current life
         # and full life (rounded off)
         for index in range(0, 10 - (health // 10)):
-            health_bar = health_bar[:-1]
+            self.health_bar = self.health_bar[:-1]
 
-        return health_bar
 
     # refresh window with new player and new tower (?)
     def refresh(self, window, player):
