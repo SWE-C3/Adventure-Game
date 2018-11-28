@@ -49,7 +49,7 @@ class GameMap:
         health_bar_window.refresh()
 
     # Call Event based on key_input
-    def EventHandler(self, key_input):
+    def event_handler(self, key_input):
         # get function from event dict
         event = self.events.get(key_input, "no event")
         # if there is any function
@@ -58,7 +58,7 @@ class GameMap:
             event()
 
     # Draw the health bar based on current player.health
-    def DrawHealthBar(self, health):
+    def draw_health_bar(self, health):
         # start with full life
         health_bar = "||||||||||"
         # cut one "|" off for each 10th between current life and full life (rounded off)
@@ -68,6 +68,6 @@ class GameMap:
         return health_bar
 
     # refresh window with new player and new tower (?)
-    def Refresh(self, window, player):
+    def refresh(self, window, player):
         self.player = player
         self.print(window)
