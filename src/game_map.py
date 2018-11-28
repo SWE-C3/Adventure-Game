@@ -70,7 +70,7 @@ class GameMap:
         # event()
 
     # Draw the health bar based on current player.health
-    def draw_health_bar(self, health):
+    def draw_health_bar(health):
         """
         create health bar based on current health
         :return: health bar string
