@@ -26,7 +26,7 @@ class GameMap:
         map_size = map_window.getmaxyx()
         # self.player.current_level.print
         map_window.addstr(
-            int(map_size[0] / 2), int(map_size[1] / 2) - 7, "{current level}")
+            map_size[0] // 2, (map_size[1] // 2) - 7, "{current level}")
         # self.player.health
         health_bar_window = curses.newwin(3, 23, map_size[0] + 2, 3)
         health_bar_window.border()
