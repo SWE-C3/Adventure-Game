@@ -39,4 +39,3 @@ class StoryScreen:
         story.refresh()
 
         self.pressed_key = read_input(story_win)
-
