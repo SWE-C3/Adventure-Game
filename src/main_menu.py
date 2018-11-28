@@ -1,15 +1,31 @@
+"""
+Interfaces for the main menu
+"""
 import curses
 
 
 def read_input(window):
+    """
+    read input from user
+    :param window: window to be read from
+    :return: character code
+    """
     return window.getch()
 
 
 def save_file():
+    """
+    save current game state to disk
+    :return: true if successful, false if not
+    """
     return True
 
 
 class MainMenu:
+    """
+    Interface class for main menu
+    """
+
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
@@ -30,6 +46,9 @@ class MainMenu:
         self.credits = "[c] Credits"
 
     def print(self):
+        """
+        render main menu to terminal window
+        """
         # clear current screen
         self.screen.clear()
         # get a Tupel (y, x) - height, width of the window
@@ -72,6 +91,9 @@ class MainMenu:
 
 
 class NewGameWindow:
+    """
+    Dialog when creating new game
+    """
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
@@ -82,6 +104,9 @@ class NewGameWindow:
         self.menu_items = ["[j] Ja", "[n] Nein"]
 
     def print(self):
+        """
+        render dialog to terminal window
+        """
         self.screen.clear()
         size = self.screen.getmaxyx()
 
@@ -114,6 +139,9 @@ class NewGameWindow:
 
 
 class EndGameWindow:
+    """
+    Dialog when quitting the game
+    """
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
@@ -123,6 +151,9 @@ class EndGameWindow:
         self.menu_items = ["[j] Ja", "[n] Nein"]
 
     def print(self):
+        """
+        render dialog to terminal window
+        """
         self.screen.clear()
         size = self.screen.getmaxyx()
 
