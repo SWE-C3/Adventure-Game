@@ -1,22 +1,41 @@
+"""
+Interfaces for the main menu
+"""
 import curses
 
 
 def read_input(window):
+    """
+    read input from user
+    :param window: window to be read from
+    :return: character code
+    """
     return window.getch()
 
 
 def save_file():
+    """
+    save current game state to disk
+    :return: true if successful, false if not
+    """
     return True
 
 
 class MainMenu:
+    """
+    Interface class for main menu
+    """
+
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
         self.top = "--- Tower Explorer ---"
-        self.logo = ["     |>>>  ", "     |     ", " _  _|_  _ ", "|;|_|;|_|;|",
-                     "\\\.    .  /", " \\\:  .  / ", "  ||:   |  ", "  ||:.  |  ",
-                     "  ||:  .|  ", "  ||:   |  ", "  ||: , |  ", "  ||:   |  ",
+        self.logo = ["     |>>>  ", "     |     ", " _  _|_  _ ",
+                     "|;|_|;|_|;|",
+                     r"\\.    .  /", r" \\:  .  / ", "  ||:   |  ",
+                     "  ||:.  |  ",
+                     "  ||:  .|  ", "  ||:   |  ", "  ||: , |  ",
+                     "  ||:   |  ",
                      "  ||:   |  ", "  ||: . |  ", "  ||_   |  ", " ", " "]
 
         if save_file():
@@ -27,6 +46,9 @@ class MainMenu:
         self.credits = "[c] Credits"
 
     def print(self):
+        """
+        render main menu to terminal window
+        """
         # clear current screen
         self.screen.clear()
         # get a Tupel (y, x) - height, width of the window
@@ -58,7 +80,8 @@ class MainMenu:
 
         y_pos_offset += 1
         menu_item_win.addstr(y_pos_offset,
-                             size[1] // 2 - len(self.credits) // 2, self.credits)
+                             size[1] // 2 - len(self.credits) // 2,
+                             self.credits)
         y_pos_offset += 1
 
         # refresh menu_item_win
@@ -68,15 +91,22 @@ class MainMenu:
 
 
 class NewGameWindow:
+    """
+    Dialog when creating new game
+    """
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
-        self.text1 = "Wenn du ein neues Spiel anfängst, wird dein bisheriger Fortschritt gelöscht."
+        self.text1 = "Wenn du ein neues Spiel anfängst, " \
+                     "wird dein bisheriger Fortschritt gelöscht."
         self.text2 = "Bist du dir sicher?"
         self.text3 = "--------------------------"
         self.menu_items = ["[j] Ja", "[n] Nein"]
 
     def print(self):
+        """
+        render dialog to terminal window
+        """
         self.screen.clear()
         size = self.screen.getmaxyx()
 
@@ -109,6 +139,9 @@ class NewGameWindow:
 
 
 class EndGameWindow:
+    """
+    Dialog when quitting the game
+    """
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
@@ -118,6 +151,9 @@ class EndGameWindow:
         self.menu_items = ["[j] Ja", "[n] Nein"]
 
     def print(self):
+        """
+        render dialog to terminal window
+        """
         self.screen.clear()
         size = self.screen.getmaxyx()
 
