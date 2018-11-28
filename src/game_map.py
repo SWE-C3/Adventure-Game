@@ -62,7 +62,7 @@ class GameMap:
         # start with full life
         health_bar = "||||||||||"
         # cut one "|" off for each 10th between current life and full life (rounded off)
-        for index in range(0, 10 - int(health / 10)):
+        for index in range(0, 10 - (health // 10)):
             health_bar = health_bar[:-1]
 
         return health_bar
