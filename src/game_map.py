@@ -1,7 +1,15 @@
+"""
+Game map interface
+"""
 import curses
 
 
 class GameMap:
+    """
+    Main User Interface to show current
+    position, current map, current health,
+    current power and the event log
+    """
     def __init__(self, player, tower):
         self.player = player
         self.tower = tower
@@ -12,10 +20,13 @@ class GameMap:
         #         - move Player
         self.events = {}
         # Event log window
-        self.event_log = ""
+        self.event_log = curses.newwin(0, 0, 0, 0)
 
     # print the GameMap onto given screen
     def print(self, window):
+        """
+        print game map to window
+        """
         screen_size = window.getmaxyx()
         game_map_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
         # self.player.current_level.name (?)
@@ -33,7 +44,6 @@ class GameMap:
         health_bar_window.addstr(1, 2, "HP: ")
         health_bar_window.addstr(1, 6, self.DrawHealthBar(40))
         health_bar_window.addstr(1, 17, "100")
-        # game_map_win.addstr(map_size[0] + 2, 3, "HP: " + self.DrawHealthBar(50) + " 50")
         # self.player.power
         game_map_win.addstr(
             map_size[0] + 3, map_size[1] - 14, "Stärke: {value}")
@@ -50,6 +60,9 @@ class GameMap:
 
     # Call Event based on key_input
     def event_handler(self, key_input):
+        """
+        call event based on user input
+        """
         # get function from event dict
         event = self.events.get(key_input, "no event")
         # if there is any function
@@ -59,9 +72,14 @@ class GameMap:
 
     # Draw the health bar based on current player.health
     def draw_health_bar(self, health):
+        """
+        create health bar based on current health
+        :return: health bar string
+        """
         # start with full life
         health_bar = "||||||||||"
-        # cut one "|" off for each 10th between current life and full life (rounded off)
+        # cut one "|" off for each 10th between current life
+        # and full life (rounded off)
         for index in range(0, 10 - (health // 10)):
             health_bar = health_bar[:-1]
 
@@ -69,5 +87,8 @@ class GameMap:
 
     # refresh window with new player and new tower (?)
     def refresh(self, window, player):
+        """
+        refresh game map
+        """
         self.player = player
         self.print(window)
