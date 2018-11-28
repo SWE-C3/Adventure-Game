@@ -13,7 +13,6 @@ class GameMap:
     def __init__(self, player, tower):
         self.player = player
         self.tower = tower
-        # TODO: read events from file (?)
         # Events: - pause
         #         - inventory
         #         - help
@@ -66,9 +65,9 @@ class GameMap:
         # get function from event dict
         event = self.events.get(key_input, "no event")
         # if there is any function
-        if event is not "no event":
-            # then call event
-            event()
+        # if event is not "no event":
+        # then call event
+        # event()
 
     # Draw the health bar based on current player.health
     def draw_health_bar(self, health):
