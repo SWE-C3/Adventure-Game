@@ -35,30 +35,30 @@ class MainMenu:
         # create new window for menu
         menu_item_win = curses.newwin(size[0], size[1], 0, 0)
         # y_pos_offset to set items vertical below each other
-        y_pos_offset = int(size[0] / 7) - 2
+        y_pos_offset = size[0] // 7 - 2
 
         #
-        menu_item_win.addstr(y_pos_offset, int(
-            size[1] / 2) - int(len(self.top) / 2), self.top)
+        menu_item_win.addstr(
+            y_pos_offset, size[1] // 2 - len(self.top) // 2, self.top)
         # increment y_pos_offset by one
         y_pos_offset += 3
 
         # for each item in menu_logo add the menu text
         for item in self.logo:
-            menu_item_win.addstr(y_pos_offset, int(
-                size[1] / 2) - int(len(item) / 2), item)
+            menu_item_win.addstr(y_pos_offset,
+                                 size[1] // 2 - len(item) // 2, item)
             y_pos_offset += 1
 
         # for each item in menu_items add the menu text
         for item in self.menu_items:
-            menu_item_win.addstr(y_pos_offset, int(
-                size[1] / 2) - int(len(item) / 2), item)
+            menu_item_win.addstr(y_pos_offset,
+                                 size[1] // 2 - len(item) // 2, item)
             # increment y_pos_offset by one
             y_pos_offset += 1
 
         y_pos_offset += 1
-        menu_item_win.addstr(y_pos_offset, int(
-            size[1] / 2) - int(len(self.credits) / 2), self.credits)
+        menu_item_win.addstr(y_pos_offset,
+                             size[1] // 2 - len(self.credits) // 2, self.credits)
         y_pos_offset += 1
 
         # refresh menu_item_win
@@ -83,22 +83,22 @@ class NewGameWindow:
         # create new window for menu
         new_item_win = curses.newwin(size[0], size[1], 0, 0)
         # y_pos_offset to set items vertical below each other
-        y_pos_offset = int(size[0] / 2) - 2
+        y_pos_offset = size[0] // 2 - 2
 
-        new_item_win.addstr(y_pos_offset, int(
-            size[1] / 2) - int(len(self.text1) / 2), self.text1)
+        new_item_win.addstr(y_pos_offset,
+                            size[1] // 2 - len(self.text1) // 2, self.text1)
         y_pos_offset += 1
-        new_item_win.addstr(y_pos_offset, int(
-            size[1] / 2) - int(len(self.text2) / 2), self.text2)
+        new_item_win.addstr(y_pos_offset,
+                            size[1] // 2 - len(self.text2) // 2, self.text2)
         y_pos_offset += 1
-        new_item_win.addstr(y_pos_offset, int(
-            size[1] / 2) - int(len(self.text3) / 2), self.text3)
+        new_item_win.addstr(y_pos_offset,
+                            size[1] // 2 - len(self.text3) // 2, self.text3)
         y_pos_offset += 1
 
         # for each item in menu_items add the menu text
         for item in self.menu_items:
-            new_item_win.addstr(y_pos_offset, int(
-                size[1] / 2) - int(len(item) / 2), item)
+            new_item_win.addstr(y_pos_offset,
+                                size[1] // 2 - len(item) // 2, item)
             # increment y_pos_offset by one
             y_pos_offset += 1
 
@@ -124,22 +124,22 @@ class EndGameWindow:
         # create new window for menu
         end_item_win = curses.newwin(size[0], size[1], 0, 0)
         # yposoffset to set items vertical below each other
-        yposoffset = int(size[0] / 2) - 2
+        yposoffset = size[0] // 2 - 2
 
-        end_item_win.addstr(yposoffset, int(
-            size[1] / 2) - int(len(self.text1) / 2), self.text1)
+        end_item_win.addstr(yposoffset,
+                            size[1] // 2 - len(self.text1) // 2, self.text1)
         yposoffset += 1
-        end_item_win.addstr(yposoffset, int(
-            size[1] / 2) - int(len(self.text2) / 2), self.text2)
+        end_item_win.addstr(yposoffset,
+                            size[1] // 2 - len(self.text2) // 2, self.text2)
         yposoffset += 1
-        end_item_win.addstr(yposoffset, int(
-            size[1] / 2) - int(len(self.text3) / 2), self.text3)
+        end_item_win.addstr(yposoffset,
+                            size[1] // 2 - len(self.text3) // 2, self.text3)
         yposoffset += 1
 
         # for each item in menu_items add the menu text
         for item in self.menu_items:
-            end_item_win.addstr(yposoffset, int(
-                size[1] / 2) - int(len(item) / 2), item)
+            end_item_win.addstr(yposoffset,
+                                size[1] // 2 - len(item) // 2, item)
             # increment yposoffset by one
             yposoffset += 1
 
