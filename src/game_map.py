@@ -65,12 +65,12 @@ class GameMap:
         # get function from event dict
         event = self.events.get(key_input, "no event")
         # if there is any function
-        # if event is not "no event":
-        # then call event
-        # event()
+        if event != "no event":
+            #then call event
+            event()
 
     # Draw the health bar based on current player.health
-    def draw_health_bar(health):
+    def draw_health_bar(self, health):
         """
         create health bar based on current health
         :return: health bar string
