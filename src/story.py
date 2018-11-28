@@ -11,7 +11,7 @@ def read_input(window):
 class StoryScreen:
     """Story Screen Class, can display parts of the games' story"""
     def __init__(self, screen):
-        """StoryScreen's init function"""    
+        """StoryScreen's init function"""   
         # hold current screen
         self.screen = screen
         # hold the pressed key in the menu
@@ -31,26 +31,25 @@ class StoryScreen:
         story_wrapper.border()
 
         text = "Lorem ipsum dolor sit amet, consetetur "
-        text += "sadipscing elitr, sed diam nonumy eirmod" 
-        text += "tempor invidunt ut labore et" 
-        text += "dolore magna aliquyam erat, sed diam voluptua. At vero eos" 
-        text += "et accusam et justo duo dolores et" 
-        text += "ea rebum. Stet clita kasd gubergren, no sea takimata" 
+        text += "sadipscing elitr, sed diam nonumy eirmod"
+        text += "tempor invidunt ut labore et"
+        text += "dolore magna aliquyam erat, sed diam voluptua. At vero eos"
+        text += "et accusam et justo duo dolores et"
+        text += "ea rebum. Stet clita kasd gubergren, no sea takimata"
         text += "sanctus est Lorem ipsum dolor sit amet."
-        text += "Lorem ipsum dolor sit amet, consetetur sadipscing" 
+        text += "Lorem ipsum dolor sit amet, consetetur sadipscing"
         text += "elitr, sed diam nonumy eirmod tempor "
-        text += "invidunt ut labore et dolore magna aliquyam erat," 
+        text += "invidunt ut labore et dolore magna aliquyam erat,"
         text += "sed diam voluptua. At vero eos et "
-        text += "accusam et justo duo dolores et ea rebum. Stet clita" 
+        text += "accusam et justo duo dolores et ea rebum. Stet clita"
         text += "kasd gubergren, no sea takimata sanctus "
-        text += "est Lorem ipsum dolor sit amet. Lorem ipsum" 
+        text += "est Lorem ipsum dolor sit amet. Lorem ipsum"
         text += "dolor sit amet, consetetur sadipscing "
-        text += "elitr, sed diam nonumy eirmod tempor invidunt" 
+        text += "elitr, sed diam nonumy eirmod tempor invidunt"
         text += "ut labore et dolore magna aliquyam "
         text += "erat, sed diam voluptua. "
 
-        story = curses.newwin(int(
-            story_wrapper_screen_size[0] * 0.80), 
+        story = curses.newwin(int(story_wrapper_screen_size[0] * 0.80),
             int(story_wrapper_screen_size[1] - 7), 3, 6)
         story.addstr(1, 0, textwrap.fill(text, 750))
         #story.addstr(1,0, text)
@@ -62,19 +61,3 @@ class StoryScreen:
         story.refresh()
 
         self.pressed_key = read_input(story_win)
-
-# init screen
-MY_SCREEN = curses.initscr()
-# no echo of inputs
-curses.noecho()
-# hide the cursor
-curses.curs_set(False)
-
-S_SCREEN = StoryScreen(MY_SCREEN)
-
-
-# check pressed key in test_menu
-while s_screen.pressed_key != ord('q'):
-    s_screen.print(screen)
-
-curses.endwin()
