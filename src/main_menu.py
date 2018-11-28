@@ -94,6 +94,7 @@ class NewGameWindow:
     """
     Dialog when creating new game
     """
+
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
@@ -142,6 +143,7 @@ class EndGameWindow:
     """
     Dialog when quitting the game
     """
+
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
