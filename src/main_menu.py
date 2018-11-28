@@ -14,9 +14,12 @@ class MainMenu:
         self.screen = screen
         self.pressed_key = ord('z')
         self.top = "--- Tower Explorer ---"
-        self.logo = ["     |>>>  ", "     |     ", " _  _|_  _ ", "|;|_|;|_|;|",
-                     "\\\.    .  /", " \\\:  .  / ", "  ||:   |  ", "  ||:.  |  ",
-                     "  ||:  .|  ", "  ||:   |  ", "  ||: , |  ", "  ||:   |  ",
+        self.logo = ["     |>>>  ", "     |     ", " _  _|_  _ ",
+                     "|;|_|;|_|;|",
+                     "\\\.    .  /", " \\\:  .  / ", "  ||:   |  ",
+                     "  ||:.  |  ",
+                     "  ||:  .|  ", "  ||:   |  ", "  ||: , |  ",
+                     "  ||:   |  ",
                      "  ||:   |  ", "  ||: . |  ", "  ||_   |  ", " ", " "]
 
         if save_file():
@@ -58,7 +61,8 @@ class MainMenu:
 
         y_pos_offset += 1
         menu_item_win.addstr(y_pos_offset,
-                             size[1] // 2 - len(self.credits) // 2, self.credits)
+                             size[1] // 2 - len(self.credits) // 2,
+                             self.credits)
         y_pos_offset += 1
 
         # refresh menu_item_win
@@ -71,7 +75,8 @@ class NewGameWindow:
     def __init__(self, screen):
         self.screen = screen
         self.pressed_key = ord('z')
-        self.text1 = "Wenn du ein neues Spiel anfängst, wird dein bisheriger Fortschritt gelöscht."
+        self.text1 = "Wenn du ein neues Spiel anfängst, " \
+                     "wird dein bisheriger Fortschritt gelöscht."
         self.text2 = "Bist du dir sicher?"
         self.text3 = "--------------------------"
         self.menu_items = ["[j] Ja", "[n] Nein"]
