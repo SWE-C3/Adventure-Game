@@ -10,15 +10,16 @@ def read_input(window):
 
 class StoryScreen:
     """Story Screen Class, can display parts of the games' story"""
+
     def __init__(self, screen):
-        """StoryScreen's init function"""   
+        """StoryScreen's init function"""
         # hold current screen
         self.screen = screen
         # hold the pressed key in the menu
         self.pressed_key = ord('z')
 
     # Print the Story-Screen to given screen.
-    def print(self, screen):
+    def print(self):
         """Prints story-screen"""
         self.screen.clear()
         screen_size = self.screen.getmaxyx()
@@ -50,7 +51,7 @@ class StoryScreen:
         text += "erat, sed diam voluptua. "
 
         story = curses.newwin(int(story_wrapper_screen_size[0] * 0.80),
-            int(story_wrapper_screen_size[1] - 7), 3, 6)
+                              int(story_wrapper_screen_size[1] - 7), 3, 6)
         story.addstr(1, 0, textwrap.fill(text, 750))
         #story.addstr(1,0, text)
 
