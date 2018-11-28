@@ -42,7 +42,7 @@ class GameMap:
         health_bar_window = curses.newwin(3, 23, map_size[0] + 2, 3)
         health_bar_window.border()
         health_bar_window.addstr(1, 2, "HP: ")
-        health_bar_window.addstr(1, 6, self.DrawHealthBar(40))
+        health_bar_window.addstr(1, 6, self.draw_health_bar(40))
         health_bar_window.addstr(1, 17, "100")
         # self.player.power
         game_map_win.addstr(
