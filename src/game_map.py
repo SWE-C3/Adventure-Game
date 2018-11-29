@@ -24,11 +24,11 @@ class GameMap:
         self.event_log = curses.newwin(0, 0, 0, 0)
 
     # print the GameMap onto given screen
-    def print(self, window):
+    def print(self):
         """
         print game map to window
         """
-        screen_size = window.getmaxyx()
+        screen_size = self.screen.getmaxyx()
         game_map_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
         # self.player.current_level.name (?)
         game_map_win.addstr(1, 3, "Ebene {number}" + self.player + self.tower)
