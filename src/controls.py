@@ -13,8 +13,8 @@ class Controls:
     Help menu for inventory and game map
     """
 
-    def __init__(self, stdscr, menu_type: str):
-        self.stdscr = stdscr
+    def __init__(self, screen, menu_type: str):
+        self.screen = screen
         with open(join(dirname(abspath(__file__)), '..', 'resources',
                        'controls.json')) as items:
             self.items = json.load(items)[menu_type]
