@@ -10,7 +10,6 @@ class GameMap:
     position, current map, current health,
     current power and the event log
     """
-
     def __init__(self, player, tower):
         self.player = player
         self.tower = tower
