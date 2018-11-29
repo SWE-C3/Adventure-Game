@@ -23,19 +23,25 @@ def draw_table_centered(window, headers: list, items: dict):
                           + 3 * len(max_column_lengths)
                           + 1) // 2
 
-    separator = '+-'
-    separator += '-+-'.join("-" * length for length in max_column_lengths)
-    separator += '-+'
+    separator_top = (
+        f'┌─{"─┬─".join("─" * length for length in max_column_lengths)}─┐'
+    )
+    separator_middle = (
+        f'├─{"─┼─".join("─" * length for length in max_column_lengths)}─┤'
+    )
+    separator_bottom = (
+        f'└─{"─┴─".join("─" * length for length in max_column_lengths)}─┘'
+    )
 
     def template(values):
         columns = [f'{value:^{max_column_lengths[index]}}' for index,
                    value in enumerate(values)]
-        return f'| {" | ".join(columns)} |'
+        return f'│ {" │ ".join(columns)} │'
 
-    window.addstr(y_pos - 3, x_pos, separator)
+    window.addstr(y_pos - 3, x_pos, separator_top)
     window.addstr(y_pos - 2, x_pos, template(headers))
-    window.addstr(y_pos - 1, x_pos, separator)
+    window.addstr(y_pos - 1, x_pos, separator_middle)
     for item in items:
         window.addstr(y_pos, x_pos, template(item.values()))
         y_pos += 1
-    window.addstr(y_pos, x_pos, separator)
+    window.addstr(y_pos, x_pos, separator_bottom)
