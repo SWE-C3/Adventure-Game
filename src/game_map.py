@@ -10,9 +10,10 @@ class GameMap:
     position, current map, current health,
     current power and the event log
     """
-    def __init__(self, player, tower):
-        self.player = player
-        self.tower = tower
+    def __init__(self, screen):
+        self.screen = screen
+        self.player = {}
+        self.tower = {}
         self.health_bar = "||||||||||"
         # Events: - pause
         #         - inventory
