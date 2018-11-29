@@ -55,7 +55,6 @@ class Inventory:
             i = i + 1
 
         inventory_screen.refresh()
-        inventory_screen.getch()
 
     # adds Item(Healing) to Inventory
     def add_item(self, item):

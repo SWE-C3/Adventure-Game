@@ -96,4 +96,3 @@ class Credits:
             self.qualitaetsmanagement)
 
         credits_win.refresh()
-        credits_win.getch()
