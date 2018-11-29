@@ -19,7 +19,6 @@ class MainMenu:
 
     def __init__(self, screen):
         self.screen = screen
-        self.pressed_key = ord('z')
         self.top = "--- Tower Explorer ---"
         self.logo = ["     |>>>  ", "     |     ", " _  _|_  _ ",
                      "|;|_|;|_|;|",
