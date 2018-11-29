@@ -3,11 +3,6 @@ import curses
 import textwrap
 
 
-def read_input(window):
-    """Get Input from User"""
-    return window.getch()
-
-
 class StoryScreen:
     """Story Screen Class, can display parts of the games' story"""
 

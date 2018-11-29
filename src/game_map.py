@@ -80,12 +80,3 @@ class GameMap:
         # and full life (rounded off)
         for index in range(0, 10 - (health // 10)):
             self.health_bar = self.health_bar[:-1]
-
-
-    # refresh window with new player and new tower (?)
-    def refresh(self, window, player):
-        """
-        refresh game map
-        """
-        self.player = player
-        self.print(window)
