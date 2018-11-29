@@ -4,15 +4,6 @@ Interfaces for the main menu
 import curses
 
 
-def read_input(window):
-    """
-    read input from user
-    :param window: window to be read from
-    :return: character code
-    """
-    return window.getch()
-
-
 def save_file():
     """
     save current game state to disk
