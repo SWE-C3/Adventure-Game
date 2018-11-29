@@ -31,9 +31,11 @@ class PauseMenu:
         # y_pos_offset to set items vertical below each other
         ypos = (size[0] // 2) - 2
 
+        # for each item in menu_items add the menu text
         for item in self.menu_items:
             menu_item_win.addstr(ypos, (
                 size[1] // 2) - (len(item) // 2), item)
             ypos += 1
 
+        # refresh menu_item_win
         menu_item_win.refresh()
