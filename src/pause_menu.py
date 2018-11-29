@@ -21,8 +21,6 @@ class PauseMenu:
         render pause menu to terminal window
         """
 
-        # clear current screen
-        self.screen.clear()
         # get a Tupel (y, x) - height, width of the window
         size = self.screen.getmaxyx()
 

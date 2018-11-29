@@ -23,8 +23,7 @@ class Controls:
         """
         print interface to window
         """
-        self.stdscr.clear()
-        height, width = self.stdscr.getmaxyx()
+        height, width = self.screen.getmaxyx()
         window = curses.newwin(height, width, 0, 0)
         draw_table_centered(window, ['Primary', 'Secondary', 'Action'],
                             self.items)

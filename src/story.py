@@ -21,7 +21,6 @@ class StoryScreen:
     # Print the Story-Screen to given screen.
     def print(self):
         """Prints story-screen"""
-        self.screen.clear()
         screen_size = self.screen.getmaxyx()
         story_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
         story_win.addstr(1, 1, "Story Name")
