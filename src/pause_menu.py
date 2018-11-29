@@ -14,7 +14,6 @@ class PauseMenu:
         self.menu_items = ["[Z] Zurück zur Karte",
                            "[S] Speicherstand laden", "[Q] Spiel verlassen"]
         self.screen = screen
-        self.pressed_key = ord('z')
 
     def print(self):
         """
