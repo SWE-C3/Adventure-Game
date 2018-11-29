@@ -40,8 +40,6 @@ class Credits:
         This methode prints out the current Credits object
         with help of the methode print_list
         """
-        # clear current screen
-        self.screen.clear()
         # get a Tupel (y, x) - height, width of the window
         screen_size = self.screen.getmaxyx()
         # create new window for credits

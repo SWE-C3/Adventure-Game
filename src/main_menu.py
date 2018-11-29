@@ -49,8 +49,6 @@ class MainMenu:
         """
         render main menu to terminal window
         """
-        # clear current screen
-        self.screen.clear()
         # get a Tupel (y, x) - height, width of the window
         size = self.screen.getmaxyx()
 
@@ -106,7 +104,6 @@ class NewGameWindow:
         """
         render dialog to terminal window
         """
-        self.screen.clear()
         size = self.screen.getmaxyx()
 
         # create new window for menu
@@ -152,7 +149,6 @@ class EndGameWindow:
         """
         render dialog to terminal window
         """
-        self.screen.clear()
         size = self.screen.getmaxyx()
 
         # create new window for menu
