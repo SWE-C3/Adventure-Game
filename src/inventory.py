@@ -70,4 +70,3 @@ class Inventory:
         adds equipment to inventory
         """
         self.equipment[equipment.name] = equipment
-
