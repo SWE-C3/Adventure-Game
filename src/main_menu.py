@@ -86,8 +86,6 @@ class MainMenu:
 
         # refresh menu_item_win
         menu_item_win.refresh()
-        # wait for pressing a key
-        self.pressed_key = read_input(menu_item_win)
 
 
 class NewGameWindow:
@@ -135,8 +133,6 @@ class NewGameWindow:
 
         # refresh menu_item_win
         new_item_win.refresh()
-        # wait for pressing a key
-        self.pressed_key = read_input(new_item_win)
 
 
 class EndGameWindow:
@@ -183,5 +179,3 @@ class EndGameWindow:
 
         # refresh menu_item_win
         end_item_win.refresh()
-        # wait for pressing a key
-        self.pressed_key = read_input(end_item_win)

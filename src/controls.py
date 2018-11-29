@@ -30,4 +30,3 @@ class Controls:
                             self.items)
         window.addstr(1, 1, 'Keymap')
         window.refresh()
-        window.getch()

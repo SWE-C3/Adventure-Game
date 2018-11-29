@@ -60,5 +60,3 @@ class StoryScreen:
         story_win.refresh()
         story_wrapper.refresh()
         story.refresh()
-
-        self.pressed_key = read_input(story_win)
