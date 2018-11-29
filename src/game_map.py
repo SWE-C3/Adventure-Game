@@ -31,7 +31,7 @@ class GameMap:
         screen_size = self.screen.getmaxyx()
         game_map_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
         # self.player.current_level.name (?)
-        game_map_win.addstr(1, 3, "Ebene {number}" + self.player + self.tower)
+        game_map_win.addstr(1, 3, f"Ebene <number> {self.player} {self.tower}")
         map_window = curses.newwin(int(screen_size[0] * 0.66) - 1,
                                    int(screen_size[1] - 5), 2, 3)
         map_window.border()
