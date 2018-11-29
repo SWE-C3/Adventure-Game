@@ -10,6 +10,7 @@ class GameMap:
     position, current map, current health,
     current power and the event log
     """
+
     def __init__(self, player, tower):
         self.player = player
         self.tower = tower
@@ -67,7 +68,7 @@ class GameMap:
         event = self.events.get(key_input, "no event")
         # if there is any function
         if event != "no event":
-            #then call event
+            # then call event
             event()
 
     # Draw the health bar based on current player.health
@@ -80,8 +81,8 @@ class GameMap:
         for index in range(0, 10 - (health // 10)):
             self.health_bar = self.health_bar[:-1]
 
-
     # refresh window with new player and new tower (?)
+
     def refresh(self, window, player):
         """
         refresh game map

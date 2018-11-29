@@ -1,13 +1,19 @@
+"""
+Interfaces for inventory
+"""
 import curses
 
-from utility import draw_table_centered
 
 from collections import namedtuple
 Equipment = namedtuple('Equipment', ('name', 'strength'))
 Item = namedtuple('Item', ('name', 'heal_value'))
 
 
-class Inventory(object):
+class Inventory:
+    """
+    Interfaces class for inventory
+    """
+
     def __init__(self, screen):
         self.screen = screen
         self.items = {}
@@ -15,6 +21,9 @@ class Inventory(object):
 
     # prints Inventory (placeholder)
     def print(self):
+        """
+        render inventory to terminal window
+        """
         self.screen.clear()
         size = self.screen.getmaxyx()
         inventory_screen = curses.newwin(size[0], size[1], 0, 0)
@@ -24,7 +33,12 @@ class Inventory(object):
         inventory_screen.addstr(1, 1, '\t'.join(['Name', 'Heilungswert']))
         i = 2
         for item in self.items.values():
-            inventory_screen.addstr(i, 2, '\t'.join([str(x) for x in [item.name, item.heal_value]]))
+            inventory_screen.addstr(i,
+                                    2,
+                                    '\t'
+                                    .join([str(x)
+                                           for x in [item.name,
+                                                     item.heal_value]]))
             i = i + 1
 
         # print Equipment
@@ -32,7 +46,12 @@ class Inventory(object):
         inventory_screen.addstr(1, 41, '\t'.join(['Name', 'Stärke']))
         i = 2
         for equipment in self.equipment.values():
-            inventory_screen.addstr(i, 42, '\t'.join([str(x) for x in [equipment.name, equipment.strength]]))
+            inventory_screen.addstr(i,
+                                    42,
+                                    '\t'
+                                    .join([str(x)
+                                           for x in [equipment.name,
+                                                     equipment.strength]]))
             i = i + 1
 
         inventory_screen.refresh()
@@ -40,8 +59,15 @@ class Inventory(object):
 
     # adds Item(Healing) to Inventory
     def add_item(self, item):
+        """
+        adds item to inventory
+        """
         self.items[item.name] = item
 
     # adds Equipment to Inventory
     def add_equipment(self, equipment):
+        """
+        adds equipment to inventory
+        """
         self.equipment[equipment.name] = equipment
+
