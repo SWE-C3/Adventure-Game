@@ -24,6 +24,6 @@ class Controls:
         print interface to window
         """
         table = table_centered(self.screen,
-                                    ['Primary', 'Secondary', 'Action'],
-                                    self.items)
+                               ['Primary', 'Secondary', 'Action'],
+                               self.items)
         table.refresh()
