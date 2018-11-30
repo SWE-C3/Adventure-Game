@@ -4,7 +4,7 @@ Interfaces for help menus
 import json
 from os.path import join, abspath, dirname
 
-from utility import draw_table_centered
+from utility import table_centered
 
 
 class Controls:
@@ -23,7 +23,7 @@ class Controls:
         """
         print interface to window
         """
-        table = draw_table_centered(self.screen,
+        table = table_centered(self.screen,
                                     ['Primary', 'Secondary', 'Action'],
                                     self.items)
         table.refresh()
