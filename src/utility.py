@@ -1,28 +1,30 @@
 """
 Utility module for reusable functions
 """
-from typing import List, Dict, Any
+import curses
+import textwrap
+from typing import List, Tuple
 
 
-def draw_table_centered(window, headers: List[str],
-                        items: List[Dict[Any, str]]):
+def draw_table_centered(window, headers: List[str], items: List[Tuple[str]]):
     """
     draw a centered table in the specified window
     :param window: window to be drawn to
     :param headers: header row values
-    :param items: table items as a dict, dict must have same amount of
-                  key-value pairs as there are items in headers
+    :param items: table items as a list of tuples, tuples must have same length
+                  as headers
     """
     max_column_lengths = list()
-    for header, key in zip(headers, items[0].keys()):
+    for index, header in enumerate(headers):
         max_column_lengths.append(
-            max(max(len(item[key]) for item in items), len(header))
+            max(max(len(item[index]) for item in items), len(header))
         )
     height, width = window.getmaxyx()
-    y_pos = height // 2 - len(items) // 2 - 1
-    x_pos = width // 2 - (sum(max_column_lengths)
-                          + 3 * len(max_column_lengths)
-                          + 1) // 2
+    table_height = len(items) + 5
+    table_width = sum(max_column_lengths) + 3 * len(headers) + 1
+    y_position = height // 2 - table_height // 2
+    x_position = width // 2 - table_width // 2
+    table = curses.newwin(table_height, table_width, y_position, x_position)
 
     separator_top = (
         f'┌─{"─┬─".join("─" * length for length in max_column_lengths)}─┐'
@@ -35,14 +37,16 @@ def draw_table_centered(window, headers: List[str],
     )
 
     def template(values):
-        columns = [f'{value:^{max_column_lengths[index]}}'
-                   for index, value in enumerate(values)]
+        columns = [f'{value:^{max_length}}'
+                   for value, max_length in zip(values, max_column_lengths)]
         return f'│ {" │ ".join(columns)} │'
 
-    window.addstr(y_pos - 3, x_pos, separator_top)
-    window.addstr(y_pos - 2, x_pos, template(headers))
-    window.addstr(y_pos - 1, x_pos, separator_middle)
+    table.addstr(0, 0, separator_top)
+    table.addstr(1, 0, template(headers))
+    table.addstr(2, 0, separator_middle)
+    y_position = 3
     for item in items:
-        window.addstr(y_pos, x_pos, template(item.values()))
-        y_pos += 1
-    window.addstr(y_pos, x_pos, separator_bottom)
+        table.addstr(y_position, 0, template(item))
+        y_position += 1
+    table.addstr(y_position, 0, separator_bottom)
+    return table
