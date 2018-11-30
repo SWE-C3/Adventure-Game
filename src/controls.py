@@ -13,8 +13,8 @@ class Controls:
     Help menu for inventory and game map
     """
 
-    def __init__(self, stdscr, menu_type: str):
-        self.stdscr = stdscr
+    def __init__(self, screen, menu_type: str):
+        self.screen = screen
         with open(join(dirname(abspath(__file__)), '..', 'resources',
                        'controls.json')) as items:
             self.items = json.load(items)[menu_type]
@@ -23,11 +23,9 @@ class Controls:
         """
         print interface to window
         """
-        self.stdscr.clear()
-        height, width = self.stdscr.getmaxyx()
+        height, width = self.screen.getmaxyx()
         window = curses.newwin(height, width, 0, 0)
         draw_table_centered(window, ['Primary', 'Secondary', 'Action'],
                             self.items)
         window.addstr(1, 1, 'Keymap')
         window.refresh()
-        window.getch()
