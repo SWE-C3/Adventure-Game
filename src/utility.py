@@ -12,7 +12,6 @@ def draw_table_centered(window, headers: List[str],
     :param headers: header row values
     :param items: table items as a dict, dict must have same amount of
                   key-value pairs as there are items in headers
-    :return:
     """
     max_column_lengths = list()
     for header, key in zip(headers, items[0].keys()):
