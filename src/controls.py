@@ -1,7 +1,6 @@
 """
 Interfaces for help menus
 """
-import curses
 import json
 from os.path import join, abspath, dirname
 
@@ -18,14 +17,13 @@ class Controls:
         with open(join(dirname(abspath(__file__)), '..', 'resources',
                        'controls.json')) as items:
             self.items = json.load(items)[menu_type]
+            self.items = [tuple(item.values()) for item in self.items]
 
     def print(self):
         """
         print interface to window
         """
-        height, width = self.screen.getmaxyx()
-        window = curses.newwin(height, width, 0, 0)
-        draw_table_centered(window, ['Primary', 'Secondary', 'Action'],
-                            self.items)
-        window.addstr(1, 1, 'Keymap')
-        window.refresh()
+        table = draw_table_centered(self.screen,
+                                    ['Primary', 'Secondary', 'Action'],
+                                    self.items)
+        table.refresh()
