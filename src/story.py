@@ -45,9 +45,6 @@ class StoryScreen:
         story = curses.newwin(int(story_wrapper_screen_size[0] * 0.80),
                               int(story_wrapper_screen_size[1] - 7), 3, 6)
         story.addstr(1, 0, textwrap.fill(text, 750))
-        #story.addstr(1,0, text)
-
-        #story_win.addstr(map_size[0] + 2, map_size[1] - 10, "Weiter (w)")
 
         story_win.refresh()
         story_wrapper.refresh()
