@@ -6,13 +6,14 @@ import textwrap
 from typing import List, Tuple
 
 
-def draw_table_centered(window, headers: List[str], items: List[Tuple[str]]):
+def table_centered(window, headers: List[str], items: List[Tuple[str]]):
     """
-    draw a centered table in the specified window
-    :param window: window to be drawn to
+    create a window with a centered table centered in the specified window
+    :param window: window to be centered on
     :param headers: header row values
     :param items: table items as a list of tuples, tuples must have same length
                   as headers
+    :return window object containing a table
     """
     max_column_lengths = list()
     for index, header in enumerate(headers):
