@@ -1,9 +1,11 @@
 """
 Utility module for reusable functions
 """
+from typing import List, Dict, Any
 
 
-def draw_table_centered(window, headers: list, items: dict):
+def draw_table_centered(window, headers: List[str],
+                        items: List[Dict[Any, str]]):
     """
     draw a centered table in the specified window
     :param window: window to be drawn to
@@ -34,8 +36,8 @@ def draw_table_centered(window, headers: list, items: dict):
     )
 
     def template(values):
-        columns = [f'{value:^{max_column_lengths[index]}}' for index,
-                   value in enumerate(values)]
+        columns = [f'{value:^{max_column_lengths[index]}}'
+                   for index, value in enumerate(values)]
         return f'│ {" │ ".join(columns)} │'
 
     window.addstr(y_pos - 3, x_pos, separator_top)
