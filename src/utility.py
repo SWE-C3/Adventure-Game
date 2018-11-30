@@ -50,3 +50,26 @@ def draw_table_centered(window, headers: List[str], items: List[Tuple[str]]):
         y_position += 1
     table.addstr(y_position, 0, separator_bottom)
     return table
+
+
+def option_dialog(window, question: str, options: List[str],
+                  dialog_width: int = 40):
+    assert max(len(option) for option in options) <= dialog_width
+    height, width = window.getmaxyx()
+    question_lines = textwrap.wrap(question, dialog_width - 2)
+    dialog_height = len(question_lines) + len(options) + 3
+    dialog = curses.newwin(dialog_height,
+                           dialog_width,
+                           height // 2 - dialog_height // 2,
+                           width // 2 - dialog_width // 2)
+    y_position = 1
+    for question_line in question_lines:
+        dialog.addstr(y_position, dialog_width // 2 - len(question_line) // 2,
+                      question_line)
+        y_position += 1
+    for option in options:
+        y_position += 1
+        dialog.addstr(y_position, dialog_width // 2 - len(option) // 2,
+                      option)
+    dialog.border()
+    return dialog
