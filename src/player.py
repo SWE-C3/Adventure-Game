@@ -9,6 +9,9 @@ import curses
 # Health, Strength und Item sind konstant, wenn ein neues Objekt Spieler
 # erzeugt wird (Neues Spiel)
 
+default_strength = 5 #Default strength of Player
+default_health = 10 # Default health of Player
+
 class Player:
     """
     This class defines the features and characteristics of an object Player.
@@ -18,9 +21,10 @@ class Player:
         if position is None:
             position = [0, 0]
         self.position = position
-        self.health = 10
-        self.strength = 0  # Default strength
-        self.items = ["","","","","","","",""]
+        self.health = default_health
+        self.strength = default_strength
+        self.items = ["","","","","","","",""] #Item Array of Player,0: Head,1: Chest, 2: Trousers, 3: Shoes, 4: weapon, 5-7: Cookies
+
 
 
     def set_pos(self, x, y):
@@ -36,8 +40,9 @@ class Player:
 
     def set_strength(self,item):
         """
-        set_strength set the strength of Player
+        set_strength sets the strength of Player
         :param:Items Item Array of Player,0: Head,1: Chest, 2: Trousers, 3: Shoes, 4: weapon, 5-7: Cookies
         """
 
-        self.strength = self.strength + x
+        for i in items:
+            self.strength += items[i]#.Item_strength
