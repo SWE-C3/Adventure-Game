@@ -20,7 +20,7 @@ class Player:
         self.position = position
         self.health = 10
         self.strength = 0  # Default strength
-        self.item = "" 
+        self.items = ["","","","","","","",""]
 
 
     def set_pos(self, x, y):
@@ -34,9 +34,10 @@ class Player:
         self.position[1] = y
 
 
-    def set_strength(self,x):
+    def set_strength(self,item):
         """
         set_strength set the strength of Player
-        :param: x added the strength of an item to Player
+        :param:Items Item Array of Player,0: Head,1: Chest, 2: Trousers, 3: Shoes, 4: weapon, 5-7: Cookies
         """
+
         self.strength = self.strength + x
