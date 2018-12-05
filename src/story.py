@@ -24,41 +24,51 @@ class StoryScreen:
         self.screen.clear()
         screen_size = self.screen.getmaxyx()
         story_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
-        story_win.addstr(1, 1, "Story Name")
+        story_win.addstr(1, 4, "Story Name")
 
-        story_wrapper = curses.newwin(
-            int(screen_size[0] * 0.66), int(screen_size[1] - 5), 2, 3)
-        story_wrapper_screen_size = story_wrapper.getmaxyx()
-        story_wrapper.border()
+        story_image = curses.newwin(
+            int(screen_size[0] * 0.50), int(screen_size[1] - 5), 2, 3)
+        story_image.border()
+        story_win.addstr(
+            int(screen_size[0] * 0.92), int(screen_size[1]*0.845), "Weiter (w)")
 
         text = "Lorem ipsum dolor sit amet, consetetur "
-        text += "sadipscing elitr, sed diam nonumy eirmod"
-        text += "tempor invidunt ut labore et"
-        text += "dolore magna aliquyam erat, sed diam voluptua. At vero eos"
         text += "et accusam et justo duo dolores et"
         text += "ea rebum. Stet clita kasd gubergren, no sea takimata"
         text += "sanctus est Lorem ipsum dolor sit amet."
         text += "Lorem ipsum dolor sit amet, consetetur sadipscing"
         text += "elitr, sed diam nonumy eirmod tempor "
-        text += "invidunt ut labore et dolore magna aliquyam erat,"
-        text += "sed diam voluptua. At vero eos et "
-        text += "accusam et justo duo dolores et ea rebum. Stet clita"
-        text += "kasd gubergren, no sea takimata sanctus "
-        text += "est Lorem ipsum dolor sit amet. Lorem ipsum"
-        text += "dolor sit amet, consetetur sadipscing "
-        text += "elitr, sed diam nonumy eirmod tempor invidunt"
-        text += "ut labore et dolore magna aliquyam "
-        text += "erat, sed diam voluptua. "
+        text += "invidunt ut labore et dolore magn"
 
-        story = curses.newwin(int(story_wrapper_screen_size[0] * 0.80),
-                              int(story_wrapper_screen_size[1] - 7), 3, 6)
-        story.addstr(1, 0, textwrap.fill(text, 750))
-        #story.addstr(1,0, text)
+        story = curses.newwin(int(screen_size[0] * 0.35),
+                              int(screen_size[1] - 5), int(1 + screen_size[0] * 0.55), 3)
+        story_size = story.getmaxyx()
+        story.border()
 
-        #story_win.addstr(map_size[0] + 2, map_size[1] - 10, "Weiter (w)")
+        story_content = curses.newwin(
+            int(story_size[0] * 0.74), int(story_size[1]*0.95), int(screen_size[0] * 0.63), 5)
+        story_content.addstr(1, 0, textwrap.fill(text, 750))
 
         story_win.refresh()
-        story_wrapper.refresh()
+        story_image.refresh()
         story.refresh()
+        story_content.refresh()
 
         self.pressed_key = read_input(story_win)
+
+
+# init screen
+MY_SCREEN = curses.initscr()
+# no echo of inputs
+curses.noecho()
+# hide the cursor
+curses.curs_set(False)
+
+S_SCREEN = StoryScreen(MY_SCREEN)
+
+
+# check pressed key in test_menu
+while S_SCREEN.pressed_key != ord('q'):
+    S_SCREEN.print()
+
+curses.endwin()
