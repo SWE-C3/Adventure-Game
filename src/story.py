@@ -55,20 +55,3 @@ class StoryScreen:
         story_content.refresh()
 
         self.pressed_key = read_input(story_win)
-
-
-# init screen
-MY_SCREEN = curses.initscr()
-# no echo of inputs
-curses.noecho()
-# hide the cursor
-curses.curs_set(False)
-
-S_SCREEN = StoryScreen(MY_SCREEN)
-
-
-# check pressed key in test_menu
-while S_SCREEN.pressed_key != ord('q'):
-    S_SCREEN.print()
-
-curses.endwin()
