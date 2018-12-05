@@ -10,8 +10,6 @@ class StoryScreen:
         """StoryScreen's init function"""
         # hold current screen
         self.screen = screen
-        # hold the pressed key in the menu
-        self.pressed_key = ord('z')
 
     # Print the Story-Screen to given screen.
     def print(self):
