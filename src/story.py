@@ -24,7 +24,8 @@ class StoryScreen:
             int(screen_size[0] * 0.50), int(screen_size[1] - 5), 2, 3)
         story_image.border()
         story_win.addstr(
-            int(screen_size[0] * 0.92), int(screen_size[1]*0.845), "Weiter (w)")
+            int(screen_size[0] * 0.92), int(screen_size[1]*0.845),
+            "Weiter (w)")
 
         text = "Lorem ipsum dolor sit amet, consetetur "
         text += "et accusam et justo duo dolores et"
@@ -35,12 +36,14 @@ class StoryScreen:
         text += "invidunt ut labore et dolore magn"
 
         story = curses.newwin(int(screen_size[0] * 0.35),
-                              int(screen_size[1] - 5), int(1 + screen_size[0] * 0.55), 3)
+                              int(screen_size[1] - 5),
+                              int(1 + screen_size[0] * 0.55), 3)
         story_size = story.getmaxyx()
         story.border()
 
         story_content = curses.newwin(
-            int(story_size[0] * 0.74), int(story_size[1]*0.95), int(screen_size[0] * 0.63), 5)
+            int(story_size[0] * 0.74), int(story_size[1]*0.95),
+            int(screen_size[0] * 0.63), 5)
         story_content.addstr(1, 0, textwrap.fill(text, 750))
         self.screen.clear()
         story_win.refresh()
