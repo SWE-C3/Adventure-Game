@@ -11,11 +11,11 @@ class Item:
     def __init__(self):
         self.name
 
-    def create(self,name):
+    def set(self,name):
         self.name = name
     
     # automatically sets the values according to the level
-    def create_auto(self,level_number):
+    def set_auto(self,level_number):
         set_random_name()
         self.health = random.randint(((level_number-1)*10),(level_number*10)) # temporary calculation
         
@@ -28,8 +28,8 @@ class Healing_Item(Item):
         super().__init__
         self.health = 0
 
-    def create(self,name,health):
-        super.create(name)
+    def set(self,name,health):
+        super.set(name)
         self.health = health
     
     # randomly sets a name from the given json file
@@ -47,8 +47,8 @@ class Equipment(Item):
         super().__init__
         self.strength = 0
 
-    def create(name,strength):
-        super.create(name)
+    def set(name,strength):
+        super.set(name)
         self.strength = strength
 
     def set_random_name(self):
@@ -67,8 +67,8 @@ class Weapon(Item):
         super().__init__
         self.strength = 0
 
-    def create(self,name,strength):
-        super.create(name)
+    def set(self,name,strength):
+        super.set(name)
         self.strength = strength
 
     def set_random_name(self):
