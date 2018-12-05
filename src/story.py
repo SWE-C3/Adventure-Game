@@ -3,11 +3,6 @@ import curses
 import textwrap
 
 
-def read_input(window):
-    """Get Input from User"""
-    return window.getch()
-
-
 class StoryScreen:
     """Story Screen Class, can display parts of the games' story"""
 
@@ -21,7 +16,6 @@ class StoryScreen:
     # Print the Story-Screen to given screen.
     def print(self):
         """Prints story-screen"""
-        self.screen.clear()
         screen_size = self.screen.getmaxyx()
         story_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
         story_win.addstr(1, 4, "Story Name")
@@ -48,10 +42,8 @@ class StoryScreen:
         story_content = curses.newwin(
             int(story_size[0] * 0.74), int(story_size[1]*0.95), int(screen_size[0] * 0.63), 5)
         story_content.addstr(1, 0, textwrap.fill(text, 750))
-
+        self.screen.clear()
         story_win.refresh()
         story_image.refresh()
         story.refresh()
         story_content.refresh()
-
-        self.pressed_key = read_input(story_win)
