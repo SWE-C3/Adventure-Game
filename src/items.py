@@ -30,7 +30,7 @@ class Healing_Item(Item):
 
     # automatically sets the values according to the level
     def set_auto(self, level_number):
-        set_random_name()
+        self.set_random_name()
         self.health = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
 
@@ -52,7 +52,7 @@ class Equipment(Item):
 
     # automatically sets the values according to the level
     def set_auto(self, level_number):
-        set_random_name()
+        self.set_random_name()
         self.health = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
 
@@ -75,6 +75,6 @@ class Weapon(Item):
 
     # automatically sets the values according to the level
     def set_auto(self, level_number):
-        set_random_name()
+        self.set_random_name()
         self.health = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
