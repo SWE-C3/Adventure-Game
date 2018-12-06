@@ -17,28 +17,27 @@ class SaveFile:
         Transfers relevant player attribute values into a textfile
         """
         with open("save_file.txt", "w") as file:
-            file.write("Ebene:\n" + str(player.level) + "\n\n")
+            file.write("Ebene:\n" + player.Player.position[0] + "\n\n")
 
-            file.write("Position:\n")
-            for i in player.position:
-                file.write(str(i) + "\n")
-            file.write("\n")
+            file.write("Position:\n" + player.Player.position[1] + "\n" +
+                       player.Player.position[2] + "\n\n")
 
-            file.write("Lebenspunkte:\n" + str(player.health) + "\n\n")
+            file.write("Lebenspunkte:\n" + str(player.Player.health) + "\n\n")
 
             file.write("Items:\n")
-            for i in player.items:
+            for i in player.Player.items:
                 file.write(i + "\n")
             file.write("\n")
 
             file.write("Cookies:\n")
-            for i in player.cookies:
+            for i in player.Player.cookies:
                 file.write(i + "\n")
 
     @staticmethod
     def read_file():
         """
-        Transfers relevant lines from a given textfile into player attribute values
+        Transfers relevant lines from a given textfile into
+        player attribute values
         """
         with open("save_file.txt", "r") as file:
             stats = file.readlines()
@@ -48,13 +47,13 @@ class SaveFile:
 
             player.level = stats[1]
 
-            player.position[0] = stats[4]
-            player.position[1] = stats[5]
+            player.Player.position[0] = stats[4]
+            player.Player.position[1] = stats[5]
 
             player.health = stats[8]
 
             for i in range(0, 5):
-                player.items[i] = stats[i+11]
+                player.Player.items[i] = stats[i+11]
 
             for i in range(0, 3):
-                player.cookies[i] = stats[i+18]
+                player.Player.cookies[i] = stats[i+18]
