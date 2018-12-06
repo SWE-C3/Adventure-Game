@@ -19,7 +19,7 @@ class MonsterEvent:
         self.header = [
             "Ein " + monster.name + " " + monster.str + " greift an."
             ]
-        Monster.fight(monster, player, self);
+        Monster.fight(monster, player, self)
 
     def player_win(self, item):
         self.screen = screen
@@ -33,7 +33,7 @@ class MonsterEvent:
             self.header = [
             monster.name + " hat " + monster.item
             ]
-            player.get_item(monster.item);
+            player.get_item(monster.item)
 
     def player_lose(self, str):
         self.screen = screen
@@ -43,5 +43,5 @@ class MonsterEvent:
            "----------",
            "- " + monster.str + " HP"
             ]
-        player.death();
+        player.death()
 
