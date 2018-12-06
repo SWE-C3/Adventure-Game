@@ -11,9 +11,10 @@ class GameMap:
     current power and the event log
     """
 
-    def __init__(self, player, tower):
-        self.player = player
-        self.tower = tower
+    def __init__(self, screen):
+        self.screen = screen
+        self.player = {}
+        self.tower = {}
         self.health_bar = "||||||||||"
         # Events: - pause
         #         - inventory
@@ -24,14 +25,14 @@ class GameMap:
         self.event_log = curses.newwin(0, 0, 0, 0)
 
     # print the GameMap onto given screen
-    def print(self, window):
+    def print(self):
         """
         print game map to window
         """
-        screen_size = window.getmaxyx()
+        screen_size = self.screen.getmaxyx()
         game_map_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
         # self.player.current_level.name (?)
-        game_map_win.addstr(1, 3, "Ebene {number}" + self.player + self.tower)
+        game_map_win.addstr(1, 3, f"Ebene <number> {self.player} {self.tower}")
         map_window = curses.newwin(int(screen_size[0] * 0.66) - 1,
                                    int(screen_size[1] - 5), 2, 3)
         map_window.border()
@@ -43,7 +44,7 @@ class GameMap:
         health_bar_window = curses.newwin(3, 23, map_size[0] + 2, 3)
         health_bar_window.border()
         health_bar_window.addstr(1, 2, "HP: ")
-        health_bar_window.addstr(1, 6, self.build_health_bar(40))
+        health_bar_window.addstr(1, 6, self.health_bar)
         health_bar_window.addstr(1, 17, "100")
         # self.player.power
         game_map_win.addstr(
@@ -80,6 +81,7 @@ class GameMap:
         # and full life (rounded off)
         for index in range(0, 10 - (health // 10)):
             self.health_bar = self.health_bar[:-1]
+
 
     # refresh window with new player and new tower (?)
 
