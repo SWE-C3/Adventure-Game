@@ -17,10 +17,10 @@ class SaveFile:
         Transfers relevant player attribute values into a textfile
         """
         with open("save_file.txt", "w") as file:
-            file.write("Ebene:\n" + player.Player.position[0] + "\n\n")
+            file.write("Ebene:\n" + player.Player.position[2] + "\n\n")
 
-            file.write("Position:\n" + player.Player.position[1] + "\n" +
-                       player.Player.position[2] + "\n\n")
+            file.write("Position:\n" + player.Player.position[0] + "\n" +
+                       player.Player.position[1] + "\n\n")
 
             file.write("Lebenspunkte:\n" + str(player.Player.health) + "\n\n")
 
@@ -45,12 +45,12 @@ class SaveFile:
             for i in range(0, 21):
                 stats[i] = stats[i].rstrip('\n')
 
-            player.level = stats[1]
+            player.Player.position[2] = stats[1]
 
             player.Player.position[0] = stats[4]
             player.Player.position[1] = stats[5]
 
-            player.health = stats[8]
+            player.Player.health = stats[8]
 
             for i in range(0, 5):
                 player.Player.items[i] = stats[i+11]
