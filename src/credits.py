@@ -4,14 +4,14 @@ Credits Interface
 import curses
 
 
-def print_list(win, row, col, mylist):
+def print_list(win, row, col, my_list):
     """
-    print_list prints out mylist on a specific window (win)
-    and in a specific (col) with 1 line betweeen the (item)s.
+    print_list prints out my_list on a specific window (win)
+    and in a specific (col) with 1 line between the (item)s.
     """
-    for item in mylist:
+    for item in my_list:
         win.addstr(row, col, item)
-        for i in range(0, len(mylist)):
+        for i in range(0, len(my_list)):
             row += 1
 
 
@@ -37,10 +37,10 @@ class Credits:
 
     def print(self):
         """
-        This methode prints out the current Credits object
-        with help of the methode print_list
+        This method prints out the current Credits object
+        with help of the method print_list
         """
-        # get a Tupel (y, x) - height, width of the window
+        # get a tuple (y, x) - height, width of the window
         screen_size = self.screen.getmaxyx()
         # create new window for credits
         credits_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
