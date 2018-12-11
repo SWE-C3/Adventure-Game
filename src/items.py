@@ -11,7 +11,7 @@ class Item:
     """
 
     def __init__(self):
-        self.name = ""
+        self.name = None
 
 
 class HealingItem(Item):
@@ -21,7 +21,7 @@ class HealingItem(Item):
 
     def __init__(self):
         super().__init__()
-        self.health = 0
+        self.health = None
 
     def set_random_name(self):
         """
@@ -47,7 +47,7 @@ class Equipment(Item):
 
     def __init__(self):
         super().__init__()
-        self.strength = 0
+        self.strength = None
 
     def set_random_name(self):
         """
@@ -74,7 +74,7 @@ class Weapon(Item):
 
     def __init__(self):
         super().__init__()
-        self.strength = 0
+        self.strength = None
 
     def set_random_name(self):
         """
