@@ -14,23 +14,27 @@ class Item:
         self.name
 
 
-class Healing_Item(Item):
+class HealingItem(Item):
     """
     Healing_Item is a subclass of Item with the additional attribute health
     """
 
     def __init__(self):
-        super().__init__()
+        self.name
         self.health = 0
 
-    # randomly sets a name from the given json file
     def set_random_name(self):
+        """
+        randomly sets a name from the given json file
+        """
         with open("items.json", "r") as read_file:
             data = json.load(read_file)
         self.name = random.choice(data["Healing_name"])
 
-    # automatically sets the values according to the level
     def set_auto(self, level_number):
+        """
+        automatically sets the values according to the level
+        """
         self.set_random_name()
         self.health = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
@@ -42,17 +46,21 @@ class Equipment(Item):
     """
 
     def __init__(self):
-        super().__init__()
+        self.name
         self.strength = 0
 
-    # randomly sets a name from the given json file
     def set_random_name(self):
+        """
+        randomly sets a name from the given json file
+        """
         with open("items.json", "r") as read_file:
             data = json.load(read_file)
         self.name = random.choice(data["Equipment_name"])
 
-    # automatically sets the values according to the level
     def set_auto(self, level_number):
+        """
+        automatically sets the values according to the level
+        """
         self.set_random_name()
         self.strength = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
@@ -65,17 +73,21 @@ class Weapon(Item):
     """
 
     def __init__(self):
-        super().__init__()
+        self.name
         self.strength = 0
 
-    # randomly sets a name from the given json file
     def set_random_name(self):
+        """
+        randomly sets a name from the given json file
+        """
         with open("items.json", "r") as read_file:
             data = json.load(read_file)
         self.name = random.choice(data["Weapon_name"])
 
-    # automatically sets the values according to the level
     def set_auto(self, level_number):
+        """
+        automatically sets the values according to the level
+        """
         self.set_random_name()
         self.strength = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
