@@ -19,7 +19,7 @@ class Healing_Item(Item):
     """
 
     def __init__(self):
-        super().__init__
+        super().__init__()
         self.health = 0
 
     # randomly sets a name from the given json file
@@ -41,7 +41,7 @@ class Equipment(Item):
     """
 
     def __init__(self):
-        super().__init__
+        super().__init__()
         self.strength = 0
 
     # randomly sets a name from the given json file
@@ -64,7 +64,7 @@ class Weapon(Item):
     """
 
     def __init__(self):
-        super().__init__
+        super().__init__()
         self.strength = 0
 
     # randomly sets a name from the given json file
