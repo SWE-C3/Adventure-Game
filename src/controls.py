@@ -1,6 +1,7 @@
 """
 Interfaces for help menus
 """
+from enum import Enum
 import json
 from os.path import join, abspath, dirname
 
@@ -12,11 +13,18 @@ class Controls:
     Help menu for inventory and game map
     """
 
-    def __init__(self, screen, menu_type: str):
+    class Type(Enum):
+        """
+        Enumeration of possible types of control menus
+        """
+        game_map = 'game_map'
+        inventory = 'inventory'
+
+    def __init__(self, screen, menu_type: Type):
         self.screen = screen
         with open(join(dirname(abspath(__file__)), '..', 'resources',
                        'controls.json')) as items:
-            self.items = json.load(items)[menu_type]
+            self.items = json.load(items)[menu_type.value]
             self.items = [tuple(item.values()) for item in self.items]
 
     def print(self):
