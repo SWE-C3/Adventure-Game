@@ -4,10 +4,6 @@ Interfaces for Monster
 from utility
 """
 
-from collections import namedtuple
-Equipment = namedtuple('Equipment', ('name', 'strength'))
-Item = namedtuple('Item', ('name', 'heal_value'))
-
 
 class Monster:
     """
@@ -21,7 +17,11 @@ class Monster:
 
         # Monsterkampf, von Monster-Event aufgerufen
     def fight(self, player, monster_event):
+        """
+        This defines how the Player wins or looses
+        and what event will be triggered
+        """
         if self.str <= player.str:
-            Event.player_wins(monster_event, self.item)
+            monster_event.player_win(self.item)
         else:
-            Event.player_lose(monster_event, self.str)
+            monster_event.player_loose(self.item)

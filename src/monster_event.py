@@ -3,17 +3,13 @@ Interfaces for Monster
 """
 from monster import Monster
 
-from collections import namedtuple
-Equipment = namedtuple('Equipment', ('name', 'strength'))
-Item = namedtuple('Item', ('name', 'heal_value'))
-
 
 class MonsterEvent:
     """
-    Interfaces class for Monster Event
+    This class defines all Events related to Monster
     """
 
-    def __init__(self, monster, screen):
+    def __init__(self, monster, player, screen):
         self.screen = screen
         self.top = "--- Monster-Event ---"
         self.header = [
@@ -21,27 +17,29 @@ class MonsterEvent:
             ]
         Monster.fight(monster, player, self)
 
-    def player_win(self, item):
+    def player_win(self, item, player, monster, screen):
+        """
+        Event for winning Player
+        """
         self.screen = screen
         self.top = "--- Monster-Event ---"
         self.header = [
             "Du konntest " + monster.name + " besiegen."
-           ]
-        if item != NULL:
+            ]
+        if item is not None:
             self.screen = screen
             self.top = "--- Monster-Event ---"
-            self.header = [
-            monster.name + " hat " + monster.item
-            ]
+            self.header = [monster.name + " hat " + monster.item]
             player.get_item(monster.item)
 
-    def player_lose(self, str):
+    def player_lose(self, monster, player, screen):
+        """
+        Event for loosing Player
+        """
         self.screen = screen
         self.top = "--- Monster-Event ---"
         self.header = [
-            monster.name + " hat dich besiegt. ",
-           "----------",
-           "- " + monster.str + " HP"
+            monster.name + " hat dich besiegt. ", "----------",
+            "- " + monster.str + " HP"
             ]
         player.death()
-
