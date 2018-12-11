@@ -27,13 +27,13 @@ class Room:
         :return:
         """
         if not self.doors['n']:
-            window.addstr(y_pos, x_pos, "+-+")
+            window.addstr(y_pos, x_pos, "┼─┼")
         else:
-            window.addstr(y_pos, x_pos, "+ +")
+            window.addstr(y_pos, x_pos, "┼ ┼")
 
         mid = ""
         if not self.doors['w']:
-            mid += "|"
+            mid += "│"
         else:
             mid += " "
 
@@ -42,12 +42,12 @@ class Room:
         else:
             mid += self.event
         if not self.doors['e']:
-            mid += "|"
+            mid += "│"
         else:
             mid += " "
         window.addstr(y_pos + 1, x_pos, mid)
 
         if self.doors['s'] is False:
-            window.addstr(y_pos + 2, x_pos, "+-+")
+            window.addstr(y_pos + 2, x_pos, "┼─┼")
         else:
-            window.addstr(y_pos + 2, x_pos, "+ +")
+            window.addstr(y_pos + 2, x_pos, "┼ ┼")
