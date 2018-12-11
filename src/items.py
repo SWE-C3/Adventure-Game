@@ -1,5 +1,6 @@
-
-import curses
+"""
+Item class
+"""
 import json
 import random
 
