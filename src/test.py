@@ -30,6 +30,7 @@ if __name__ == '__main__':
     STORY_SCREEN = StoryScreen(STDSCR)
 
     CURRENT_SCREEN = MAIN_MENU
+    PREVIOUS_SCREEN = None
     STDSCR.refresh()
     MAIN_MENU.print()
     while True:
@@ -43,17 +44,20 @@ if __name__ == '__main__':
                 CURRENT_SCREEN = QUIT_GAME_DIALOG
             elif KEY == ord('c'):
                 CURRENT_SCREEN = CREDITS
+            PREVIOUS_SCREEN = MAIN_MENU
         elif CURRENT_SCREEN is NEW_GAME_DIALOG:
             if KEY == ord('j'):
                 CURRENT_SCREEN = GAME_MAP
             elif KEY == ord('n'):
-                CURRENT_SCREEN = MAIN_MENU
+                CURRENT_SCREEN = PREVIOUS_SCREEN
+            PREVIOUS_SCREEN = NEW_GAME_DIALOG
         elif CURRENT_SCREEN is QUIT_GAME_DIALOG:
             if KEY == ord('j'):
                 curses.endwin()
                 break
             elif KEY == ord('n'):
-                CURRENT_SCREEN = MAIN_MENU
+                CURRENT_SCREEN = PREVIOUS_SCREEN
+            PREVIOUS_SCREEN = QUIT_GAME_DIALOG
         elif CURRENT_SCREEN is GAME_MAP:
             if KEY == ord('h'):
                 CURRENT_SCREEN = CONTROLS_GAME_MAP
@@ -63,17 +67,21 @@ if __name__ == '__main__':
                 CURRENT_SCREEN = STORY_SCREEN
             elif KEY == 27:
                 CURRENT_SCREEN = PAUSE_MENU
+            PREVIOUS_SCREEN = GAME_MAP
         elif CURRENT_SCREEN is CONTROLS_GAME_MAP:
             if KEY == 27:
                 CURRENT_SCREEN = GAME_MAP
+            PREVIOUS_SCREEN = CONTROLS_GAME_MAP
         elif CURRENT_SCREEN is CONTROLS_INVENTORY:
             if KEY == 27:
                 CURRENT_SCREEN = INVENTORY
+            PREVIOUS_SCREEN = CONTROLS_INVENTORY
         elif CURRENT_SCREEN is INVENTORY:
             if KEY == ord('h'):
                 CURRENT_SCREEN = CONTROLS_INVENTORY
             elif KEY == 27:
                 CURRENT_SCREEN = GAME_MAP
+            PREVIOUS_SCREEN = INVENTORY
         elif CURRENT_SCREEN is PAUSE_MENU:
             if KEY == ord('z'):
                 CURRENT_SCREEN = GAME_MAP
@@ -81,10 +89,13 @@ if __name__ == '__main__':
                 CURRENT_SCREEN = NEW_GAME_DIALOG
             elif KEY == ord('q'):
                 CURRENT_SCREEN = QUIT_GAME_DIALOG
+            PREVIOUS_SCREEN = PAUSE_MENU
         elif CURRENT_SCREEN is STORY_SCREEN:
             if KEY == 27:
                 CURRENT_SCREEN = GAME_MAP
+            PREVIOUS_SCREEN = STORY_SCREEN
         elif CURRENT_SCREEN is CREDITS:
             if KEY == 27:
                 CURRENT_SCREEN = MAIN_MENU
+            PREVIOUS_SCREEN = CREDITS
         CURRENT_SCREEN.print()
