@@ -24,7 +24,6 @@ class Inventory:
         """
         render inventory to terminal window
         """
-        self.screen.clear()
         size = self.screen.getmaxyx()
         inventory_screen = curses.newwin(size[0], size[1], 0, 0)
 
@@ -55,7 +54,6 @@ class Inventory:
             i = i + 1
 
         inventory_screen.refresh()
-        inventory_screen.getch()
 
     # adds Item(Healing) to Inventory
     def add_item(self, item):
