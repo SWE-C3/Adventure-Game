@@ -1,7 +1,6 @@
 """
 Interfaces for Monster
 """
-from monster import Monster
 
 
 class MonsterEvent:
@@ -9,13 +8,12 @@ class MonsterEvent:
     This class defines all Events related to Monster
     """
 
-    def __init__(self, monster, player, screen):
+    def __init__(self, monster, screen):
         self.screen = screen
         self.top = "--- Monster-Event ---"
         self.header = [
             "Ein " + monster.name + " " + monster.str + " greift an."
             ]
-        Monster.fight(monster, player, self)
 
     def player_win(self, item, player, monster, screen):
         """
