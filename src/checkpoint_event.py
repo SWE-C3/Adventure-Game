@@ -25,7 +25,8 @@ class CheckpointEvent:
         Prints a dialog asking the user to save game progress
         """
         dialog = option_dialog(self,
-                               "Möchtest du dich ausruhen und deinen Fortschritt speichern?",
+                               "Möchtest du dich ausruhen und " +
+                               "deinen Fortschritt speichern?",
                                ["[j] Ja", "[n] Nein"])
         dialog.refresh()
 
