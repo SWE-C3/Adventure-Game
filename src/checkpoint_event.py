@@ -2,16 +2,15 @@
 Contains CheckpointEvent class
 """
 
-from src.save_file import SaveFile
 from src.utility import option_dialog
 
 
 class CheckpointEvent:
     """
-    Defines methods for handling checkpoint event
+    Defines methods for checkpoint event
     """
 
-    def __init__(self, screen, save):
+    def __init__(self, screen):
         """
         Initial output
         """
@@ -20,23 +19,22 @@ class CheckpointEvent:
         self.header = [
             "Du hast einen Speicherpunkt erreicht."
         ]
-        SaveFile.write_file(save)
 
-    def print(self):
+    def save_dialog(self):
         """
-
+        Prints a dialog asking the user to save game progress
         """
         dialog = option_dialog(self,
                                "Möchtest du dich ausruhen und deinen Fortschritt speichern?",
                                ["[j] Ja", "[n] Nein"])
-        print(dialog)
+        dialog.refresh()
 
-    def check_confirmed(self, screen):
+    def saved_progress(self, screen):
         """
-        Event if checkpoint is confirmed
+        If user wants to save progress
         """
         self.screen = screen
         self.top = "--- Checkpoint-Event ---"
         self.header = [
-            "Deine HP wurden um 30 erhöht und dein Fortschritt gespeichert."
+            "Deine HP wurden um 3 erhöht und dein Fortschritt gespeichert."
         ]
