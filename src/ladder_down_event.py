@@ -14,7 +14,6 @@ class LadderDownEvent:
         self.header = [
             "Du hast eine Leiter nach unten gefunden."
         ]
-        self.change_level(player)
 
     def change_level(self, player):
         """
