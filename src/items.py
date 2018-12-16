@@ -53,7 +53,7 @@ class Healing(Item):
         """
         To String
         """
-        return ("Name: " + self.name + "  Health_Power: " + str(self.health))
+        return "Name: " + self.name + "  Health_Power: " + str(self.health)
 
 
 class Equipment(Item):
@@ -89,4 +89,5 @@ class Equipment(Item):
         """
         To String
         """
-        return ("Name: " + self.name + "  Type: " + self.type + "  Strength: " + str(self.strength))
+        return ("Name: " + self.name + "  Type: " + self.type
+                + "  Strength: " + str(self.strength))
