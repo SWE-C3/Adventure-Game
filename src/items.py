@@ -18,6 +18,9 @@ class Item:
         self.name = None
 
     def set(self, name):
+        """
+        need that because nametuple is not mutable
+        """
         self.name = name
 
 
@@ -27,14 +30,15 @@ class Healing_Item(Item):
     """
 
     def __init__(self):
-        self.name = None
+        self.__init__()
         self.health = None
 
     def set_random_name(self):
         """
         randomly sets a name from the given json file
         """
-        with open(join(dirname(abspath(__file__)), '..', 'resources', 'items.json')) as items:
+        with open(join(dirname(abspath(__file__)), '..',
+                      'resources', 'items.json')) as items:
             data = json.load(items)
         self.name = random.choice(data["Healing_name"])
 
@@ -54,7 +58,7 @@ class Equipment(Item):
     """
 
     def __init__(self):
-        self.name = None
+        self.__init__()
         self.strength = None
         self.part = Enum("Part", "Weapon Helmet Body Pants Shoes")
 
@@ -62,7 +66,8 @@ class Equipment(Item):
         """
         randomly sets a name from the given json file
         """
-        with open(join(dirname(abspath(__file__)), '..', 'resources', 'items.json')) as items:
+        with open(join(dirname(abspath(__file__)), '..', 
+                       'resources', 'items.json')) as items:
             data = json.load(items)
         file_name = self.part + "_name"
         self.name = random.choice(data[file_name])
@@ -72,10 +77,5 @@ class Equipment(Item):
         automatically sets the values according to the level
         """
         self.set_random_name()
-        self.health = random.randint(
+        self.strength = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
-
-test = Equipment()
-test.part = "Weapon"
-test.set_auto(1)
-print(test.name)
