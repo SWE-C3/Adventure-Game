@@ -15,7 +15,8 @@ class LadderDownEvent:
             "Du hast eine Leiter nach unten gefunden."
         ]
 
-    def change_level(self, player):
+    @classmethod
+    def change_level(cls, player):
         """
         changes the current Level
         """
