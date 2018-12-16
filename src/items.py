@@ -3,7 +3,6 @@ Item classes
 """
 
 import json
-import test
 import random
 from os.path import join, abspath, dirname
 from enum import Enum
