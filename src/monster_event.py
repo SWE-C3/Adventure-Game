@@ -7,7 +7,6 @@ class MonsterEvent:
     """
     This class defines all Events related to Monster
     """
-
     def __init__(self, monster, screen):
         self.screen = screen
         self.top = "--- Monster-Event ---"
@@ -15,7 +14,20 @@ class MonsterEvent:
             "Ein " + monster.name + " " + monster.str + " greift an."
             ]
 
-    def player_win(self, item, player, monster, screen):
+        # Monsterkampf, von Monster-Event aufgerufen
+
+    def fight(self, player, monster, screen):
+        """
+        This defines how the Player wins or looses
+        and what event will be triggered
+        """
+
+        if monster.get_str() <= player.str:
+            self.player_win(self, player, monster, screen)
+        else:
+            self.player_lose(self, monster, screen, player)
+
+    def player_win(self, player, monster, screen):
         """
         Event for winning Player
         """
@@ -24,13 +36,13 @@ class MonsterEvent:
         self.header = [
             "Du konntest " + monster.name + " besiegen."
             ]
-        if item is not None:
+        if monster.item is not None:
             self.screen = screen
             self.top = "--- Monster-Event ---"
             self.header = [monster.name + " hat " + monster.item]
             player.get_item(monster.item)
 
-    def player_lose(self, monster, player, screen):
+    def player_lose(self, monster, screen, player):
         """
         Event for loosing Player
         """
@@ -38,6 +50,6 @@ class MonsterEvent:
         self.top = "--- Monster-Event ---"
         self.header = [
             monster.name + " hat dich besiegt. ", "----------",
-            "- " + monster.str + " HP"
+            "- " + monster.get_str() + " HP"
             ]
         player.death()
