@@ -1,7 +1,11 @@
+"""
+Item classes
+"""
+
 import json
 import test
 import random
-
+from os.path import join, abspath, dirname
 from enum import Enum
 
 
@@ -26,18 +30,18 @@ class Healing_Item(Item):
         self.name = None
         self.health = None
 
-    def set(self, name, health):
-        super.set(name)
-        self.health = health
-
-    # randomly sets a name from the given json file
     def set_random_name(self):
-        with open("../resources/items.json", "r") as read_file:
-            data = json.load(read_file)
+        """
+        randomly sets a name from the given json file
+        """
+        with open(join(dirname(abspath(__file__)), '..', 'resources', 'items.json')) as items:
+            data = json.load(items)
         self.name = random.choice(data["Healing_name"])
 
-    # automatically sets the values according to the level
     def set_auto(self, level_number):
+        """
+        automatically sets the values according to the level
+        """
         self.set_random_name()
         self.health = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
@@ -50,18 +54,28 @@ class Equipment(Item):
     """
 
     def __init__(self):
-        super().__init__
-        self.strength = 0
+        self.name = None
+        self.strength = None
         self.part = Enum("Part", "Weapon Helmet Body Pants Shoes")
 
     def set_random_name(self):
-        with open("../resources/items.json", "r") as read_file:
-            data = json.load(read_file)
+        """
+        randomly sets a name from the given json file
+        """
+        with open(join(dirname(abspath(__file__)), '..', 'resources', 'items.json')) as items:
+            data = json.load(items)
         file_name = self.part + "_name"
         self.name = random.choice(data[file_name])
 
-    # automatically sets the values according to the level
     def set_auto(self, level_number):
+        """
+        automatically sets the values according to the level
+        """
         self.set_random_name()
         self.health = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
+
+test = Equipment()
+test.part = "Weapon"
+test.set_auto(1)
+print(test.name)
