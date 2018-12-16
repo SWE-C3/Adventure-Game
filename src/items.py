@@ -24,7 +24,7 @@ class Item:
         self.name = name
 
 
-class Healing_Item(Item):
+class Healing(Item):
     """
     Healing_Item is a subclass of Item with the additional attribute health
     """
