@@ -30,7 +30,7 @@ class Healing_Item(Item):
     """
 
     def __init__(self):
-        self.__init__()
+        super().__init__()
         self.health = None
 
     def set_random_name(self):
@@ -38,7 +38,7 @@ class Healing_Item(Item):
         randomly sets a name from the given json file
         """
         with open(join(dirname(abspath(__file__)), '..',
-                      'resources', 'items.json')) as items:
+                       'resources', 'items.json')) as items:
             data = json.load(items)
         self.name = random.choice(data["Healing_name"])
 
@@ -58,7 +58,7 @@ class Equipment(Item):
     """
 
     def __init__(self):
-        self.__init__()
+        super().__init__()
         self.strength = None
         self.part = Enum("Part", "Weapon Helmet Body Pants Shoes")
 
@@ -66,7 +66,7 @@ class Equipment(Item):
         """
         randomly sets a name from the given json file
         """
-        with open(join(dirname(abspath(__file__)), '..', 
+        with open(join(dirname(abspath(__file__)), '..',
                        'resources', 'items.json')) as items:
             data = json.load(items)
         file_name = self.part + "_name"
