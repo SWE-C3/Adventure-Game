@@ -27,3 +27,8 @@ class Controls:
                                ['Primary', 'Secondary', 'Action'],
                                self.items)
         table.refresh()
+
+    def handle(self, key: int, previous):
+        while key != 27:
+            key = self.screen.getch()
+        return previous

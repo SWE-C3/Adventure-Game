@@ -94,3 +94,8 @@ class Credits:
             self.qualitaetsmanagement)
 
         credits_win.refresh()
+
+    def handle(self, key: int, previous):
+        while key != 27:
+            key = self.screen.getch()
+        return previous

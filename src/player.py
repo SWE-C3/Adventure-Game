@@ -27,3 +27,15 @@ class Player:
         # default_strength + sum of the items:
         # Head + Chest + Trousers + Shoes + Weapon
         return self.default_strength + sum(self.items)
+
+    def move_up(self):
+        self.position[0] = max(0, self.position[0] - 1)
+
+    def move_down(self):
+        self.position[0] = max(0, self.position[0] + 1)
+
+    def move_left(self):
+        self.position[1] = max(0, self.position[0] - 1)
+
+    def move_right(self):
+        self.position[1] = max(0, self.position[0] + 1)

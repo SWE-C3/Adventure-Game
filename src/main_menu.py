@@ -1,7 +1,11 @@
 """
 Interfaces for the main menu
 """
+import sys
+
 import curses
+
+from constants import NEW_GAME, MAP, CREDITS, QUIT_GAME, ESCAPE
 
 
 def save_file():
@@ -75,6 +79,18 @@ class MainMenu:
         # refresh menu_item_win
         menu_item_win.refresh()
 
+    def handle(self, key: int, previous):
+        while True:
+            if key == ord('n'):
+                return NEW_GAME
+            elif key == ord('f'):
+                return MAP
+            elif key == ord('q'):
+                return QUIT_GAME
+            elif key == ord('c'):
+                return CREDITS
+            key = self.screen.getch()
+
 
 class NewGameWindow:
     """
@@ -121,6 +137,14 @@ class NewGameWindow:
         # refresh menu_item_win
         new_item_win.refresh()
 
+    def handle(self, key: int, previous):
+        while True:
+            if key == ord('n'):
+                return previous
+            elif key == ord('j'):
+                return MAP
+            key = self.screen.getch()
+
 
 class EndGameWindow:
     """
@@ -165,3 +189,12 @@ class EndGameWindow:
 
         # refresh menu_item_win
         end_item_win.refresh()
+
+    def handle(self, key: int, previous):
+        while True:
+            if key == ord('n'):
+                return previous
+            elif key == ord('j'):
+                curses.endwin()
+                sys.exit()
+            key = self.screen.getch()

@@ -3,6 +3,7 @@ testing module
 """
 import curses
 
+from constants import *
 from controls import Controls
 from credits import Credits
 from game_map import GameMap
@@ -11,80 +12,33 @@ from main_menu import MainMenu, NewGameWindow, EndGameWindow
 from pause_menu import PauseMenu
 from story import StoryScreen
 
+
+def initialize(standard_screen):
+    global MAIN, MAP, INVENTORY, PAUSE, STORY, CONTROLS_MAP, CONTROLS_INVENTORY, CREDITS, NEW_GAME, QUIT_GAME
+    MAIN = MainMenu(standard_screen)
+    NEW_GAME = NewGameWindow(standard_screen)
+    QUIT_GAME = EndGameWindow(standard_screen)
+    MAP = GameMap(standard_screen)
+    CONTROLS_MAP = Controls(standard_screen, 'game_map')
+    CONTROLS_INVENTORY = Controls(standard_screen, 'inventory')
+    CREDITS = Credits(standard_screen)
+    PAUSE = PauseMenu(standard_screen)
+    INVENTORY = Inventory(standard_screen)
+    STORY = StoryScreen(standard_screen)
+
+
 if __name__ == '__main__':
     STDSCR = curses.initscr()
     curses.cbreak()
     curses.noecho()
     curses.curs_set(0)
     STDSCR.keypad(True)
+    initialize(STDSCR)
 
-    MAIN_MENU = MainMenu(STDSCR)
-    NEW_GAME_DIALOG = NewGameWindow(STDSCR)
-    QUIT_GAME_DIALOG = EndGameWindow(STDSCR)
-    GAME_MAP = GameMap(STDSCR)
-    CONTROLS_GAME_MAP = Controls(STDSCR, 'game_map')
-    CONTROLS_INVENTORY = Controls(STDSCR, 'inventory')
-    CREDITS = Credits(STDSCR)
-    PAUSE_MENU = PauseMenu(STDSCR)
-    INVENTORY = Inventory(STDSCR)
-    STORY_SCREEN = StoryScreen(STDSCR)
-
-    CURRENT_SCREEN = MAIN_MENU
-    STDSCR.refresh()
-    MAIN_MENU.print()
+    previous = None
+    current = MAIN
     while True:
-        KEY = STDSCR.getch()
-        if CURRENT_SCREEN is MAIN_MENU:
-            if KEY == ord('n'):
-                CURRENT_SCREEN = NEW_GAME_DIALOG
-            elif KEY == ord('f'):
-                CURRENT_SCREEN = GAME_MAP
-            elif KEY == ord('b'):
-                CURRENT_SCREEN = QUIT_GAME_DIALOG
-            elif KEY == ord('c'):
-                CURRENT_SCREEN = CREDITS
-        elif CURRENT_SCREEN is NEW_GAME_DIALOG:
-            if KEY == ord('j'):
-                CURRENT_SCREEN = GAME_MAP
-            elif KEY == ord('n'):
-                CURRENT_SCREEN = MAIN_MENU
-        elif CURRENT_SCREEN is QUIT_GAME_DIALOG:
-            if KEY == ord('j'):
-                curses.endwin()
-                break
-            elif KEY == ord('n'):
-                CURRENT_SCREEN = MAIN_MENU
-        elif CURRENT_SCREEN is GAME_MAP:
-            if KEY == ord('h'):
-                CURRENT_SCREEN = CONTROLS_GAME_MAP
-            elif KEY == ord('i'):
-                CURRENT_SCREEN = INVENTORY
-            elif KEY == ord('s'):
-                CURRENT_SCREEN = STORY_SCREEN
-            elif KEY == 27:
-                CURRENT_SCREEN = PAUSE_MENU
-        elif CURRENT_SCREEN is CONTROLS_GAME_MAP:
-            if KEY == 27:
-                CURRENT_SCREEN = GAME_MAP
-        elif CURRENT_SCREEN is CONTROLS_INVENTORY:
-            if KEY == 27:
-                CURRENT_SCREEN = INVENTORY
-        elif CURRENT_SCREEN is INVENTORY:
-            if KEY == ord('h'):
-                CURRENT_SCREEN = CONTROLS_INVENTORY
-            elif KEY == 27:
-                CURRENT_SCREEN = GAME_MAP
-        elif CURRENT_SCREEN is PAUSE_MENU:
-            if KEY == ord('z'):
-                CURRENT_SCREEN = GAME_MAP
-            elif KEY == ord('s'):
-                CURRENT_SCREEN = NEW_GAME_DIALOG
-            elif KEY == ord('q'):
-                CURRENT_SCREEN = QUIT_GAME_DIALOG
-        elif CURRENT_SCREEN is STORY_SCREEN:
-            if KEY == 27:
-                CURRENT_SCREEN = GAME_MAP
-        elif CURRENT_SCREEN is CREDITS:
-            if KEY == 27:
-                CURRENT_SCREEN = MAIN_MENU
-        CURRENT_SCREEN.print()
+        current.print()
+        key = STDSCR.getch()
+        current, previous = current.handle(key, previous), current
+
