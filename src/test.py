@@ -2,8 +2,9 @@
 testing module
 """
 import curses
+import sys
 
-from constants import *
+import constants
 from controls import Controls
 from credits import Credits
 from game_map import GameMap
@@ -14,17 +15,16 @@ from story import StoryScreen
 
 
 def initialize(standard_screen):
-    global MAIN, MAP, INVENTORY, PAUSE, STORY, CONTROLS_MAP, CONTROLS_INVENTORY, CREDITS, NEW_GAME, QUIT_GAME
-    MAIN = MainMenu(standard_screen)
-    NEW_GAME = NewGameWindow(standard_screen)
-    QUIT_GAME = EndGameWindow(standard_screen)
-    MAP = GameMap(standard_screen)
-    CONTROLS_MAP = Controls(standard_screen, 'game_map')
-    CONTROLS_INVENTORY = Controls(standard_screen, 'inventory')
-    CREDITS = Credits(standard_screen)
-    PAUSE = PauseMenu(standard_screen)
-    INVENTORY = Inventory(standard_screen)
-    STORY = StoryScreen(standard_screen)
+    constants.MAIN = MainMenu(standard_screen)
+    constants.NEW_GAME = NewGameWindow(standard_screen)
+    constants.QUIT_GAME = EndGameWindow(standard_screen)
+    constants.MAP = GameMap(standard_screen)
+    constants.CONTROLS_MAP = Controls(standard_screen, 'game_map')
+    constants.CONTROLS_INVENTORY = Controls(standard_screen, 'inventory')
+    constants.CREDITS = Credits(standard_screen)
+    constants.PAUSE = PauseMenu(standard_screen)
+    constants.INVENTORY = Inventory(standard_screen)
+    constants.STORY = StoryScreen(standard_screen)
 
 
 if __name__ == '__main__':
@@ -36,7 +36,9 @@ if __name__ == '__main__':
     initialize(STDSCR)
 
     previous = None
-    current = MAIN
+    current = constants.MAIN
+    print(current)
+    sys.exit()
     while True:
         current.print()
         key = STDSCR.getch()
