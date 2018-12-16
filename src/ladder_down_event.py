@@ -8,7 +8,7 @@ class LadderDownEvent:
     This class defines the ladder down event
     """
 
-    def __init__(self, player, screen):
+    def __init__(self, screen):
         self.screen = screen
         self.top = "--- Leiter-runter-Event ---"
         self.header = [

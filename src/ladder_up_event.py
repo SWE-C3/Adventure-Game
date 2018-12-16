@@ -8,13 +8,13 @@ class LadderUpEvent:
     This class defines the ladder down event
     """
 
-    def __init__(self, player, screen):
+    def __init__(self, screen):
         self.screen = screen
         self.top = "--- Leiter-hoch-Event ---"
         self.header = [
             "Du hast eine Leiter nach oben gefunden."
         ]
-        
+
     def change_level(self, player):
         """
         changes the current Level
