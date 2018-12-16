@@ -49,6 +49,12 @@ class Healing(Item):
         self.health = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
 
+    def to_string(self):
+        """
+        To String
+        """
+        return ("Name: " + self.name + "  Health_Power: " + str(self.health))
+
 
 class Equipment(Item):
     """
@@ -59,7 +65,7 @@ class Equipment(Item):
     def __init__(self):
         super().__init__()
         self.strength = None
-        self.part = Enum("Part", "Weapon Helmet Body Pants Shoes")
+        self.type = Enum("Type", "Weapon Helmet Body Pants Shoes")
 
     def set_random_name(self):
         """
@@ -68,7 +74,7 @@ class Equipment(Item):
         with open(join(dirname(abspath(__file__)), '..',
                        'resources', 'items.json')) as items:
             data = json.load(items)
-        file_name = self.part + "_name"
+        file_name = self.type + "_name"
         self.name = random.choice(data[file_name])
 
     def set_auto(self, level_number):
@@ -78,3 +84,9 @@ class Equipment(Item):
         self.set_random_name()
         self.strength = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
+
+    def to_string(self):
+        """
+        To String
+        """
+        return ("Name: " + self.name + "  Type: " + self.type + "  Strength: " + str(self.strength))
