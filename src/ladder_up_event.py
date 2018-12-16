@@ -16,7 +16,7 @@ class LadderUpEvent:
         ]
 
     @classmethod
-    def change_level(cls, self, player):
+    def change_level(cls, player):
         """
         changes the current Level
         """
