@@ -4,6 +4,7 @@ Interfaces for Monster
 from utility
 """
 
+
 class Monster:
     """
     Interfaces class for Monster
