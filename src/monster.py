@@ -17,3 +17,6 @@ class Monster:
 
     def get_str(self):
         return self.str
+    """
+    Getter method for Monster strength
+    """
