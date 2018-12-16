@@ -52,7 +52,7 @@ class Healing(Item):
 
 class Equipment(Item):
     """
-    Equipment is a subclass of Item with the additional attribute strength, 
+    Equipment is a subclass of Item with the additional attribute strength,
     you have to set a predefined part for initialization
     """
 
