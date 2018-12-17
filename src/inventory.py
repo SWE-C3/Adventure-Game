@@ -5,6 +5,9 @@ import curses
 
 
 from collections import namedtuple
+
+import constants
+
 Equipment = namedtuple('Equipment', ('name', 'strength'))
 Item = namedtuple('Item', ('name', 'heal_value'))
 
@@ -54,6 +57,14 @@ class Inventory:
             i = i + 1
 
         inventory_screen.refresh()
+
+    def handle(self, key: int, previous):
+        while True:
+            if key == constants.ESCAPE:
+                return constants.MAP
+            elif key == ord('h'):
+                return constants.CONTROLS_INVENTORY
+            key = self.screen.getch()
 
     # adds Item(Healing) to Inventory
     def add_item(self, item):

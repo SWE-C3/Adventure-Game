@@ -4,8 +4,9 @@ Interfaces for the main menu
 import sys
 
 import curses
+from utility import option_dialog
 
-from constants import NEW_GAME, MAP, CREDITS, QUIT_GAME, ESCAPE
+import constants
 
 
 def save_file():
@@ -82,13 +83,13 @@ class MainMenu:
     def handle(self, key: int, previous):
         while True:
             if key == ord('n'):
-                return NEW_GAME
+                return constants.NEW_GAME
             elif key == ord('f'):
-                return MAP
+                return constants.MAP
             elif key == ord('q'):
-                return QUIT_GAME
+                return constants.QUIT_GAME
             elif key == ord('c'):
-                return CREDITS
+                return constants.CREDITS
             key = self.screen.getch()
 
 
@@ -99,50 +100,24 @@ class NewGameWindow:
 
     def __init__(self, screen):
         self.screen = screen
-        self.pressed_key = ord('z')
-        self.text1 = "Wenn du ein neues Spiel anfängst, " \
-                     "wird dein bisheriger Fortschritt gelöscht."
-        self.text2 = "Bist du dir sicher?"
-        self.text3 = "--------------------------"
-        self.menu_items = ["[j] Ja", "[n] Nein"]
+        self.question = "Wenn du ein neues Spiel anfängst, " \
+                        "wird dein bisheriger Fortschritt gelöscht. " \
+                        "Bist du dir sicher?"
+        self.options = ["[j] Ja", "[n] Nein"]
 
     def print(self):
         """
         render dialog to terminal window
         """
-        size = self.screen.getmaxyx()
-
-        # create new window for menu
-        new_item_win = curses.newwin(size[0], size[1], 0, 0)
-        # y_pos_offset to set items vertical below each other
-        y_pos_offset = size[0] // 2 - 2
-
-        new_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text1) // 2, self.text1)
-        y_pos_offset += 1
-        new_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text2) // 2, self.text2)
-        y_pos_offset += 1
-        new_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text3) // 2, self.text3)
-        y_pos_offset += 1
-
-        # for each item in menu_items add the menu text
-        for item in self.menu_items:
-            new_item_win.addstr(y_pos_offset,
-                                size[1] // 2 - len(item) // 2, item)
-            # increment y_pos_offset by one
-            y_pos_offset += 1
-
-        # refresh menu_item_win
-        new_item_win.refresh()
+        dialog = option_dialog(self.screen, self.question, self.options)
+        dialog.refresh()
 
     def handle(self, key: int, previous):
         while True:
             if key == ord('n'):
                 return previous
             elif key == ord('j'):
-                return MAP
+                return constants.MAP
             key = self.screen.getch()
 
 
@@ -153,42 +128,16 @@ class EndGameWindow:
 
     def __init__(self, screen):
         self.screen = screen
-        self.pressed_key = ord('z')
-        self.text1 = "Nicht gespeicherte Fortschritte gehen verloren!"
-        self.text2 = "Beenden?"
-        self.text3 = "--------------"
-        self.menu_items = ["[j] Ja", "[n] Nein"]
+        self.question = "Nicht gespeicherte Fortschritte gehen verloren! " \
+                        "Beenden?"
+        self.options = ["[j] Ja", "[n] Nein"]
 
     def print(self):
         """
         render dialog to terminal window
         """
-        size = self.screen.getmaxyx()
-
-        # create new window for menu
-        end_item_win = curses.newwin(size[0], size[1], 0, 0)
-        # offset to set items vertical below each other
-        y_pos_offset = size[0] // 2 - 2
-
-        end_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text1) // 2, self.text1)
-        y_pos_offset += 1
-        end_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text2) // 2, self.text2)
-        y_pos_offset += 1
-        end_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text3) // 2, self.text3)
-        y_pos_offset += 1
-
-        # for each item in menu_items add the menu text
-        for item in self.menu_items:
-            end_item_win.addstr(y_pos_offset,
-                                size[1] // 2 - len(item) // 2, item)
-            # increment offset by one
-            y_pos_offset += 1
-
-        # refresh menu_item_win
-        end_item_win.refresh()
+        dialog = option_dialog(self.screen, self.question, self.options)
+        dialog.refresh()
 
     def handle(self, key: int, previous):
         while True:

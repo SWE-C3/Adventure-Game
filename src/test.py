@@ -19,8 +19,9 @@ def initialize(standard_screen):
     constants.NEW_GAME = NewGameWindow(standard_screen)
     constants.QUIT_GAME = EndGameWindow(standard_screen)
     constants.MAP = GameMap(standard_screen)
-    constants.CONTROLS_MAP = Controls(standard_screen, 'game_map')
-    constants.CONTROLS_INVENTORY = Controls(standard_screen, 'inventory')
+    constants.CONTROLS_MAP = Controls(standard_screen, Controls.Type.game_map)
+    constants.CONTROLS_INVENTORY = Controls(standard_screen,
+                                            Controls.Type.inventory)
     constants.CREDITS = Credits(standard_screen)
     constants.PAUSE = PauseMenu(standard_screen)
     constants.INVENTORY = Inventory(standard_screen)
@@ -33,14 +34,12 @@ if __name__ == '__main__':
     curses.noecho()
     curses.curs_set(0)
     STDSCR.keypad(True)
+    STDSCR.refresh()
     initialize(STDSCR)
 
     previous = None
     current = constants.MAIN
-    print(current)
-    sys.exit()
     while True:
         current.print()
         key = STDSCR.getch()
         current, previous = current.handle(key, previous), current
-

@@ -2,6 +2,8 @@
 import curses
 import textwrap
 
+import constants
+
 
 class StoryScreen:
     """Story Screen Class, can display parts of the games' story"""
@@ -48,3 +50,9 @@ class StoryScreen:
         story_image.refresh()
         story.refresh()
         story_content.refresh()
+
+    def handle(self, key: int, previous):
+        while True:
+            if key == constants.ESCAPE:
+                return previous
+            key = self.screen.getch()

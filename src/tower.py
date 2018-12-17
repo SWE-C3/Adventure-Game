@@ -19,4 +19,4 @@ class Tower:
         :return:
         """
 
-        self.level[level_index].print(window)
+        self.levels[level_index].print(window)

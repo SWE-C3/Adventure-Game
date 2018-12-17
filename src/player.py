@@ -7,16 +7,14 @@ class Player:
     """
     This class defines the features and characteristics of an object Player.
     """
-    default_position = [0, 0, 0]  # Default position of Player [x,y,Level]
     default_health = 10  # Default health of Player
     default_strength = 5  # Default strength of Player
 
     def __init__(self, position=None):
-        if position is None:
-            position = self.default_position
-        self.position = position
-        self.health = self.default_health
-        self.items = []  # 0: Head, 1: Chest, 2: Trousers, 3: Shoes, 4: Weapon
+        self.position = position or Position()
+        self.max_health = self.default_health
+        self.current_health = self.default_health
+        self.items = []
         self.cookies = []
 
     @property
@@ -28,14 +26,40 @@ class Player:
         # Head + Chest + Trousers + Shoes + Weapon
         return self.default_strength + sum(self.items)
 
-    def move_up(self):
-        self.position[0] = max(0, self.position[0] - 1)
 
-    def move_down(self):
-        self.position[0] = max(0, self.position[0] + 1)
+class Position:
 
-    def move_left(self):
-        self.position[1] = max(0, self.position[0] - 1)
+    def __init__(self, max_x: int = 30, max_y: int = 30, max_level: int = 10):
+        self._x = 1
+        self._y = 1
+        self._level = 1
+        self.max_x = max_x
+        self.max_y = max_y
+        self.max_level = max_level
 
-    def move_right(self):
-        self.position[1] = max(0, self.position[0] + 1)
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = max(1, min(self.max_x, value))
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, value):
+        self._y = max(1, min(self.max_y, value))
+
+    @property
+    def level(self):
+        return self._level
+
+    @level.setter
+    def level(self, value):
+        self._level = max(1, min(self.max_level, value))
+
+    def __repr__(self):
+        return f"Position(x={self.x}, y={self.y}, level={self.level})"
