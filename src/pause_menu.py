@@ -15,7 +15,9 @@ class PauseMenu:
 
     def __init__(self, screen):
         self.menu_items = ["[Z] Zurück zur Karte",
-                           "[S] Speicherstand laden", "[Q] Spiel verlassen"]
+                           "[S] Speicherstand laden",
+                           "[Q] Spiel verlassen",
+                           "[M] Zum Hauptmenü"]
         self.screen = screen
 
     def print(self):
@@ -33,4 +35,8 @@ class PauseMenu:
                 return constants.NEW_GAME
             elif key == ord('q'):
                 return constants.QUIT_GAME
+            elif key == ord('m'):
+                return constants.MAIN
             key = self.screen.getch()
+            previous.print()
+            self.print()

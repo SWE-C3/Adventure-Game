@@ -65,6 +65,7 @@ class Inventory:
             elif key == ord('h'):
                 return constants.CONTROLS_INVENTORY
             key = self.screen.getch()
+            self.print()
 
     # adds Item(Healing) to Inventory
     def add_item(self, item):

@@ -30,7 +30,7 @@ class GameMap:
         screen_size = self.screen.getmaxyx()
         game_map_win = curses.newwin(screen_size[0], screen_size[1], 0, 0)
         game_map_win.addstr(1, 3, f"Ebene {self.player.position.level}")
-        map_window = curses.newwin(13 + 2, 13 * 3 + 2, 2, 3)
+        map_window = curses.newwin(13 + 2, 13 * 3 + 2, 2, screen_size[1] // 2 - (13 * 3 + 2) // 2)
         map_window.border()
         map_size = map_window.getmaxyx()
         map_window.addstr(self.player.position.y, self.player.position.x, "x")
@@ -77,5 +77,7 @@ class GameMap:
                 self.player.position.x -= 3
             elif key in (ord('d'), constants.RIGHT):
                 self.player.position.x += 3
+            elif key == ord('z'):
+                return constants.STORY
             self.print()
             key = self.screen.getch()

@@ -56,3 +56,4 @@ class StoryScreen:
             if key == constants.ESCAPE:
                 return previous
             key = self.screen.getch()
+            self.print()

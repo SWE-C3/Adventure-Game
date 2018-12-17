@@ -25,59 +25,62 @@ class MainMenu:
     def __init__(self, screen):
         self.screen = screen
         self.top = "--- Tower Explorer ---"
-        self.logo = ["     |>>>  ", "     |     ", " _  _|_  _ ",
+        self.logo = ["     |>>>  ",
+                     "     |     ",
+                     " _  _|_  _ ",
                      "|;|_|;|_|;|",
-                     r"\\.    .  /", r" \\:  .  / ", "  ||:   |  ",
-                     "  ||:.  |  ",
-                     "  ||:  .|  ", "  ||:   |  ", "  ||: , |  ",
+                     r"\\.    .  /",
+                     r" \\:  .  / ",
                      "  ||:   |  ",
-                     "  ||:   |  ", "  ||: . |  ", "  ||_   |  ", " ", " "]
+                     "  ||:.  |  ",
+                     "  ||:  .|  ",
+                     "  ||:   |  ",
+                     "  ||: , |  ",
+                     "  ||:   |  ",
+                     "  ||:   |  ",
+                     "  ||: . |  ",
+                     "  ||_   |  "]
 
         if save_file():
-            self.menu_items = ["[n] Neues Spiel",
-                               "[f] Fortsetzen", "[b] Beenden"]
+            self.menu_items = ["[N] Neues Spiel",
+                               "[F] Fortsetzen", "[Q] Beenden"]
         else:
-            self.menu_items = ["[n] Neues Spiel", "[b] Beenden"]
-        self.credits = "[c] Credits"
+            self.menu_items = ["[N] Neues Spiel", "[Q] Beenden"]
+        self.credits = "[C] Credits"
 
     def print(self):
         """
         render main menu to terminal window
         """
         # get a tuple (y, x) - height, width of the window
-        size = self.screen.getmaxyx()
+        height, width = self.screen.getmaxyx()
 
-        # create new window for menu
-        menu_item_win = curses.newwin(size[0], size[1], 0, 0)
+        menu_item_win = curses.newwin(height, width, 0, 0)
         # y_pos_offset to set items vertical below each other
-        y_pos_offset = size[0] // 7 - 2
+        y_pos_offset = height // 7 - 2
 
-        #
         menu_item_win.addstr(
-            y_pos_offset, size[1] // 2 - len(self.top) // 2, self.top)
-        # increment y_pos_offset by one
+            y_pos_offset, width // 2 - len(self.top) // 2, self.top)
         y_pos_offset += 3
 
-        # for each item in menu_logo add the menu text
-        for item in self.logo:
+        for item in self.logo[:height - 12]:
             menu_item_win.addstr(y_pos_offset,
-                                 size[1] // 2 - len(item) // 2, item)
+                                 width // 2 - len(item) // 2, item)
             y_pos_offset += 1
 
-        # for each item in menu_items add the menu text
+        y_pos_offset += 2
+
         for item in self.menu_items:
             menu_item_win.addstr(y_pos_offset,
-                                 size[1] // 2 - len(item) // 2, item)
-            # increment y_pos_offset by one
+                                 width // 2 - len(item) // 2, item)
             y_pos_offset += 1
 
         y_pos_offset += 1
         menu_item_win.addstr(y_pos_offset,
-                             size[1] // 2 - len(self.credits) // 2,
+                             width // 2 - len(self.credits) // 2,
                              self.credits)
         y_pos_offset += 1
 
-        # refresh menu_item_win
         menu_item_win.refresh()
 
     def handle(self, key: int, previous):
@@ -91,6 +94,7 @@ class MainMenu:
             elif key == ord('c'):
                 return constants.CREDITS
             key = self.screen.getch()
+            self.print()
 
 
 class NewGameWindow:
@@ -103,7 +107,7 @@ class NewGameWindow:
         self.question = "Wenn du ein neues Spiel anfängst, " \
                         "wird dein bisheriger Fortschritt gelöscht. " \
                         "Bist du dir sicher?"
-        self.options = ["[j] Ja", "[n] Nein"]
+        self.options = ["[J] Ja", "[N] Nein"]
 
     def print(self):
         """
@@ -119,6 +123,8 @@ class NewGameWindow:
             elif key == ord('j'):
                 return constants.MAP
             key = self.screen.getch()
+            previous.print()
+            self.print()
 
 
 class EndGameWindow:
@@ -128,9 +134,8 @@ class EndGameWindow:
 
     def __init__(self, screen):
         self.screen = screen
-        self.question = "Nicht gespeicherte Fortschritte gehen verloren! " \
-                        "Beenden?"
-        self.options = ["[j] Ja", "[n] Nein"]
+        self.question = "Nicht gespeicherte Fortschritte gehen verloren! Beenden?"
+        self.options = ["[J] Ja", "[N] Nein"]
 
     def print(self):
         """
@@ -147,3 +152,5 @@ class EndGameWindow:
                 curses.endwin()
                 sys.exit()
             key = self.screen.getch()
+            previous.print()
+            self.print()

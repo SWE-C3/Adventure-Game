@@ -39,4 +39,5 @@ class Controls:
     def handle(self, key: int, previous):
         while key != 27:
             key = self.screen.getch()
+            self.print()
         return previous
