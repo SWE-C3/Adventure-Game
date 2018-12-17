@@ -1,1 +1,1 @@
-https://download.lfd.uci.edu/pythonlibs/r5uhg2lo/curses-2.2-cp37-cp37m-win32.whl
+resources/curses-2.2-cp37-cp37m-win32.whl
