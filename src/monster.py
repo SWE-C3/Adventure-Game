@@ -16,7 +16,8 @@ class Monster:
         self.name = name
 
     def get_str(self):
+        """
+        getter for monster strength
+        :return: monster.str : int
+        """
         return self.str
-    """
-    Getter method for Monster strength
-    """
