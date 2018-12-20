@@ -47,5 +47,6 @@ class MonsterEvent:
             else:
                 player.respawn()
 
-        event_log.addstr(y_pos_offset + 2, size[1] // 2 - len(outcome) // 2, outcome)
+        event_log.addstr(
+            y_pos_offset + 2, size[1] // 2 - len(outcome) // 2, outcome)
         event_log.refresh()
