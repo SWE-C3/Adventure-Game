@@ -1,55 +1,51 @@
 """
 Interfaces for Monster
 """
+import curses
 
 
 class MonsterEvent:
     """
     This class defines all Events related to Monster
     """
-    def __init__(self, monster, screen):
+    def __init__(self, screen):
         self.screen = screen
-        self.top = "--- Monster-Event ---"
-        self.header = [
-            "Ein " + monster.name + " " + monster.str + " greift an."
-            ]
 
-        # Monsterkampf, von Monster-Event aufgerufen
-
-    def fight(self, player, monster, screen):
+    def fight(self, player, monster):
         """
         This defines how the Player wins or looses
-        and what event will be triggered
         """
+        top = "--- Monster-Event ---"
+        header = "Ein " + monster.name + " " + str(monster.str) + " greift an."
 
-        if monster.get_str() <= player.str:
-            self.player_win(self, player, monster, screen)
+        size = self.screen.getmaxyx()
+
+        # create new window for menu
+        event_log = curses.newwin(size[0], size[1], 0, 0)
+        # y_pos_offset to set items vertical below each other
+        y_pos_offset = size[0] // 7 - 2
+
+        #
+        event_log.addstr(
+            y_pos_offset, size[1] // 2 - len(top) // 2, top)
+        event_log.addstr(
+            y_pos_offset + 1, size[1] // 2 - len(header) // 2, header)
+
+        # player win
+        if monster.str <= player.strength:
+            outcome = "Du konntest " + monster.name + " besiegen."
+            if monster.item is not None:
+                player.inv.add_item(monster.item)
+        # player loose
         else:
-            self.player_lose(self, monster, screen, player)
+            outcome = monster.name + " hat dich besiegt. (-1 HP)"
+            player.health -= 1
+            # player dies
+            if player.health == 0:
+                player.death()
+            # player survives
+            else:
+                player.respawn()
 
-    def player_win(self, player, monster, screen):
-        """
-        Event for winning Player
-        """
-        self.screen = screen
-        self.top = "--- Monster-Event ---"
-        self.header = [
-            "Du konntest " + monster.name + " besiegen."
-            ]
-        if monster.item is not None:
-            self.screen = screen
-            self.top = "--- Monster-Event ---"
-            self.header = [monster.name + " hat " + monster.item]
-            player.get_item(monster.item)
-
-    def player_lose(self, monster, screen, player):
-        """
-        Event for loosing Player
-        """
-        self.screen = screen
-        self.top = "--- Monster-Event ---"
-        self.header = [
-            monster.name + " hat dich besiegt. ", "----------",
-            "- " + monster.get_str() + " HP"
-            ]
-        player.death()
+        event_log.addstr(y_pos_offset + 2, size[1] // 2 - len(outcome) // 2, outcome)
+        event_log.refresh()
