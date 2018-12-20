@@ -35,7 +35,7 @@ if __name__ == '__main__':
     curses.curs_set(0)
     STDSCR.keypad(True)
     STDSCR.refresh()
-    STDSCR.timeout(100)
+    STDSCR.timeout(500)
     initialize(STDSCR)
 
     previous = None
