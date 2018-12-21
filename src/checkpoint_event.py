@@ -48,7 +48,8 @@ class CheckpointEvent:
         self.playerinstance.health += 3
         self.savefileinstance.write_file()
 
-        header = "Deine HP wurden um 3 erhöht und dein Fortschritt gespeichert."
+        header = "Deine HP wurden um 3 erhöht und " \
+                 "dein Fortschritt gespeichert."
 
         height, width = self.screen.getmaxyx()
 
@@ -69,23 +70,27 @@ class SaveDialog:
 
     def __init__(self, screen):
         self.screen = screen
-        self.question = "Möchtest du dich ausruhen und deinen Fortschritt speichern?"
+        self.question = "Möchtest du dich ausruhen und " \
+                        "deinen Fortschritt speichern?"
         self.options = ["[J] Ja", "[N] Nein"]
         self.checkpointeventinstance = CheckpointEvent(self)
 
     def print(self):
         """
-        Render dialog to terminal window
+        Renders dialog to terminal window
         """
         dialog = option_dialog(self.screen, self.question, self.options)
         dialog.refresh()
 
     def handle(self, key: int, previous):
+        """
+        Handles user input
+        """
         while True:
-            if key == ord('n'):
-                return previous
-            elif key == ord('j'):
+            if key == ord('j'):
                 self.checkpointeventinstance.saved_state()
+            elif key == ord('n'):
+                return previous
             key = self.screen.getch()
             previous.print()
             self.print()
