@@ -37,6 +37,8 @@ class CheckpointEvent:
         event_log.addstr(
             y_pos_offset + 1, width // 2 - len(header) // 2, header)
 
+        event_log.refresh()
+
         self.savedialoginstance.print()
 
     def saved_state(self):
@@ -60,6 +62,8 @@ class CheckpointEvent:
             y_pos_offset, width // 2 - len(self.top) // 2, self.top)
         event_log.addstr(
             y_pos_offset + 1, width // 2 - len(header) // 2, header)
+
+        event_log.refresh()
 
 
 class SaveDialog:
