@@ -49,7 +49,7 @@ class Healing(Item):
         self.health = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
 
-    def to_string(self):
+    def __str__(self):
         """
         To String
         """
@@ -62,10 +62,12 @@ class Equipment(Item):
     you have to set a predefined part for initialization
     """
 
+    type = Enum("Type", "Weapon Helmet Body Pants Shoes")
+
     def __init__(self):
         super().__init__()
         self.strength = None
-        self.type = Enum("Type", "Weapon Helmet Body Pants Shoes")
+        self.type = None
 
     def set_random_name(self):
         """
@@ -85,7 +87,7 @@ class Equipment(Item):
         self.strength = random.randint(
             ((level_number-1)*10), (level_number*10))  # temporary calculation
 
-    def to_string(self):
+    def __str__(self):
         """
         To String
         """
