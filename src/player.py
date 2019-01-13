@@ -29,13 +29,15 @@ class Player:
 
 class Position:
 
-    def __init__(self, max_x: int = 30, max_y: int = 30, max_level: int = 10):
+    def __init__(self, max_x: int = 30, max_y: int = 30, max_level: int = 10,
+                 layouts: list = None):
         self._x = 1
         self._y = 1
-        self._level = 1
+        self._level = 0
         self.max_x = max_x
         self.max_y = max_y
         self.max_level = max_level
+        self.layouts = layouts
 
     @property
     def x(self):
@@ -43,7 +45,12 @@ class Position:
 
     @x.setter
     def x(self, value):
-        self._x = max(1, min(self.max_x, value))
+        if (value > self.x and
+                self.layouts[self.level][self.y][self.x + 1] == ' '):
+            self._x = max(1, min(self.max_x, value))
+        elif (value < self.x and
+              self.layouts[self.level][self.y][self.x - 1] == ' '):
+            self._x = max(1, min(self.max_x, value))
 
     @property
     def y(self):
@@ -51,7 +58,12 @@ class Position:
 
     @y.setter
     def y(self, value):
-        self._y = max(1, min(self.max_y, value))
+        if (value > self.y and
+                self.layouts[self.level][self.y + 1][self.x] == ' '):
+            self._y = max(1, min(self.max_y, value))
+        elif (value < self.y and
+              self.layouts[self.level][self.y - 1][self.x] == ' '):
+            self._y = max(1, min(self.max_y, value))
 
     @property
     def level(self):

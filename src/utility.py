@@ -83,3 +83,22 @@ def option_dialog(window, question: str, options: List[str],
                       option)
     dialog.border()
     return dialog
+
+
+COLOR_ID = 0
+COLORS = {}
+
+
+def color(foreground: int = curses.COLOR_WHITE,
+          background: int = curses.COLOR_BLACK):
+    if (foreground, background) in COLORS:
+        return curses.color_pair(COLORS[(foreground, background)])
+    global COLOR_ID
+    COLOR_ID += 1
+    try:
+        curses.init_pair(COLOR_ID, foreground, background)
+    except:
+        COLOR_ID = 1
+        curses.init_pair(COLOR_ID, foreground, background)
+    COLORS[(foreground, background)] = COLOR_ID
+    return curses.color_pair(COLOR_ID)

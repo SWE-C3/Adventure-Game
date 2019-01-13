@@ -1,3 +1,4 @@
+STDSCR = None
 MAIN = None
 MAP = None
 INVENTORY = None
@@ -8,6 +9,8 @@ CONTROLS_INVENTORY = None
 CREDITS = None
 NEW_GAME = None
 QUIT_GAME = None
+SAVE_GAME = None
+MONSTER = None
 
 TAB = 9
 ENTER = 10
@@ -18,3 +21,15 @@ DOWN = 258
 UP = 259
 LEFT = 260
 RIGHT = 261
+
+HORIZONTAL = '─'
+VERTICAL = '│'
+CROSS = '┼'
+LEFT_OUT = '├'
+RIGHT_OUT = '┤'
+TOP_OUT = '┬'
+BOTTOM_OUT = '┴'
+TOP_RIGHT = '└'
+TOP_LEFT = '┘'
+BOTTOM_RIGHT = '┐'
+BOTTOM_LEFT = '┌'
