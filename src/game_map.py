@@ -6,6 +6,8 @@ import random
 from pathlib import Path
 
 import constants
+import globals
+from dialog import Dialog
 from player import Player, Position
 from tower import Tower
 from user_interface import UserInterface
@@ -43,6 +45,7 @@ class GameMap(UserInterface):
         self.current_position = (
             self.player.position.x, self.player.position.y)
         self.discovered = set()
+        self.setup()
 
     def setup(self):
         self.screen = curses.newwin(0, 0)
@@ -69,7 +72,7 @@ class GameMap(UserInterface):
         """
         print game map to window
         """
-        if self.screen is None or self.resized:
+        if self.resized:
             self.resized = False
             self.setup()
         self.screen.addstr(1, 3, f"Ebene {self.player.position.level}")
@@ -114,12 +117,12 @@ class GameMap(UserInterface):
                               message, color(foreground=curses.COLOR_YELLOW))
 
     def handle(self, key: int, previous=None):
-        if key == 27:
-            return constants.PAUSE
+        if key == constants.ESCAPE:
+            return globals.PAUSE
         elif key == ord('i'):
-            return constants.INVENTORY
+            return globals.INVENTORY
         elif key == ord('h'):
-            return constants.CONTROLS_MAP
+            return globals.CONTROLS_MAP
         elif key in (ord('w'), constants.UP):
             self.player.position.y -= 2
         elif key in (ord('s'), constants.DOWN):
@@ -129,7 +132,7 @@ class GameMap(UserInterface):
         elif key in (ord('d'), constants.RIGHT):
             self.player.position.x += 2
         elif key == ord('z'):
-            return constants.STORY
+            return globals.STORY
         self._last_position, self.current_position = self.current_position, (
             self.player.position.x,
             self.player.position.y)
@@ -140,11 +143,11 @@ class GameMap(UserInterface):
         if self._last_position != self.current_position:
             if current == 'M':
                 self.log_event("You are fighting a monster")
-                return constants.MONSTER
+                return globals.MONSTER
             elif current == 'I':
                 self.log_event('You have found an item')
             elif current == 'S':
-                return constants.SAVE_GAME
+                return globals.SAVE_GAME
             elif current == '=':
                 self.log_event('You found the ladder')
             elif current == 'O':
@@ -153,43 +156,37 @@ class GameMap(UserInterface):
         return self
 
 
-class SaveGameDialog:
+class SaveGameDialog(Dialog):
     """
     Dialog when creating new game
     """
 
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self):
+        super().__init__()
         self.question = "Du kannst deinen Spielstand speichern. " \
                         "Dein vorheriger Spielstand wird ueberschrieben. " \
                         "Bist du dir sicher?"
         self.options = ["[J] Ja", "[N] Nein"]
-
-    def print(self):
-        """
-        render dialog to terminal window
-        """
-        dialog = option_dialog(self.screen, self.question, self.options)
-        dialog.refresh()
+        self.setup()
 
     def handle(self, key: int, previous=None):
         if key == ord('n'):
-            constants.MAP.log_event('You did not save the game')
-            return constants.MAP
+            globals.MAP.log_event('You did not save the game')
+            return globals.MAP
         elif key == ord('j'):
-            constants.MAP.log_event('You saved the game')
-            return constants.MAP
-        constants.MAP.print()
+            globals.MAP.log_event('You saved the game')
+            return globals.MAP
+        globals.MAP.print()
         return self
 
 
-class MonsterDialog:
+class MonsterDialog(Dialog):
     """
     Dialog when creating new game
     """
 
-    def __init__(self, screen):
-        self.screen = screen
+    def __init__(self):
+        super().__init__()
         self.success = random.randint(0, 10) < 3
         if self.success:
             self.question = 'Du kaempfst gegen ein Monster! ' \
@@ -198,25 +195,19 @@ class MonsterDialog:
             self.question = 'Du kaempfst gegen ein Monster! ' \
                             'Und das Monster besiegt dich...'
         self.options = ["[O] OK"]
-
-    def print(self):
-        """
-        render dialog to terminal window
-        """
-        dialog = option_dialog(self.screen, self.question, self.options)
-        dialog.refresh()
+        self.setup()
 
     def handle(self, key: int, previous=None):
         if key == ord('o'):
             if self.success:
-                constants.MAP.log_event('You bested the monster!')
-                self.question = 'Du kaempfst gegen ein Monster! ' \
-                                'Und das Monster besiegt dich...'
-            else:
-                constants.MAP.log_event('The monster overpowered you...')
+                globals.MAP.log_event('You bested the monster!')
                 self.question = 'Du kaempfst gegen ein Monster! ' \
                                 'Und du besiegst es!'
+            else:
+                globals.MAP.log_event('The monster overpowered you...')
+                self.question = 'Du kaempfst gegen ein Monster! ' \
+                                'Und das Monster besiegt dich...'
             self.success = random.randint(0, 10) < 3
-            return constants.MAP
-        constants.MAP.print()
+            return globals.MAP
+        globals.MAP.print()
         return self

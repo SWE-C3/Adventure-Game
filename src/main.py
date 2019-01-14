@@ -5,31 +5,30 @@ import curses
 import logging
 from pathlib import Path
 
-import constants
+import globals
 from controls import Controls
 from credits import Credits
 from game_map import GameMap, SaveGameDialog, MonsterDialog
 from inventory import Inventory
-from main_menu import MainMenu, NewGameWindow, EndGameWindow
+from main_menu import MainMenu, NewGameDialog, EndGameDialog
 from pause_menu import PauseMenu
 from story import StoryScreen
 
 
 def initialize(standard_screen):
-    constants.STDSCR = standard_screen
-    constants.MAIN = MainMenu(standard_screen)
-    constants.NEW_GAME = NewGameWindow(standard_screen)
-    constants.QUIT_GAME = EndGameWindow(standard_screen)
-    constants.MAP = GameMap()
-    constants.CONTROLS_MAP = Controls(standard_screen, Controls.Type.game_map)
-    constants.CONTROLS_INVENTORY = Controls(standard_screen,
-                                            Controls.Type.inventory)
-    constants.CREDITS = Credits(standard_screen)
-    constants.PAUSE = PauseMenu(standard_screen)
-    constants.INVENTORY = Inventory(standard_screen)
-    constants.STORY = StoryScreen(standard_screen)
-    constants.SAVE_GAME = SaveGameDialog(standard_screen)
-    constants.MONSTER = MonsterDialog(standard_screen)
+    globals.STDSCR = standard_screen
+    globals.MAIN = MainMenu()
+    globals.NEW_GAME = NewGameDialog()
+    globals.QUIT_GAME = EndGameDialog()
+    globals.MAP = GameMap()
+    globals.CONTROLS_MAP = Controls(Controls.Type.game_map)
+    globals.CONTROLS_INVENTORY = Controls(Controls.Type.inventory)
+    globals.CREDITS = Credits()
+    globals.PAUSE = PauseMenu()
+    globals.INVENTORY = Inventory()
+    globals.STORY = StoryScreen()
+    globals.SAVE_GAME = SaveGameDialog()
+    globals.MONSTER = MonsterDialog()
 
 
 if __name__ == '__main__':
@@ -47,9 +46,16 @@ if __name__ == '__main__':
     initialize(STDSCR)
 
     screen_size = STDSCR.getmaxyx()
+    current = globals.MAIN
     previous = None
-    current = constants.MAIN
+    temp = None
     while True:
+        if screen_size != STDSCR.getmaxyx():
+            screen_size = STDSCR.getmaxyx()
+            for interface in globals.INTERFACES:
+                interface.resized = True
         current.print()
         key = STDSCR.getch()
-        current, previous = current.handle(key, previous), current
+        temp = current.handle(key, previous)
+        if temp is not current:
+            previous, current = current, temp
