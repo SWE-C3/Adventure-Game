@@ -30,11 +30,14 @@ class GameMap(UserInterface):
         self.map = None
         self.status_info = None
         self.levels = list()
-        with (Path(__file__).parent.parent
-              / 'resources'
-              / 'levelfile.txt').open() as levels:
-            self.levels = self.parse_levels(levels.read())
-        self.player = Player(Position(33, 13, layouts=self.levels))
+        self.level_width = 51
+        self.level_height = 15
+        self.levels = list()
+        for file in (Path(__file__).parent.parent
+                     / 'resources' / 'levels').glob('*.level'):
+            self.levels.append(file.open().read())
+        self.player = Player(Position(self.level_width, self.level_height,
+                                      layouts=self.levels))
         self._last_position = self.current_position
         self.discovered: List[Set[Tuple[int, int]]] = [set() for _ in
                                                        range(len(self.levels))]
@@ -53,13 +56,12 @@ class GameMap(UserInterface):
         return self.player.x, self.player.y
 
     @staticmethod
-    def parse_levels(content: str) -> List[List[List[str]]]:
-        content = content.replace('-', constants.HORIZONTAL)
-        content = content.replace('|', constants.VERTICAL)
-        content = content.replace('+', constants.CROSS)
-        return [[[char for char in row]
-                 for row in level.split('\n')]
-                for level in content.split('\n\n')]
+    def parse_level(level: str) -> List[List[str]]:
+        level = level.replace('-', constants.HORIZONTAL)
+        level = level.replace('|', constants.VERTICAL)
+        level = level.replace('+', constants.CROSS)
+        return [[char for char in row]
+                for row in level.split('\n')]
 
     def level_value(self, x_index: int, y_index: int) -> str:
         return self.levels[self.player.level][y_index][x_index]
@@ -67,7 +69,8 @@ class GameMap(UserInterface):
     def setup(self):
         self.screen = curses.newwin(0, 0)
         height, width = self.screen.getmaxyx()
-        self.map = curses.newwin(13, 34, 2, width // 2 - 33 // 2)
+        self.map = curses.newwin(self.level_height, self.level_width + 1,
+                                 2, width // 2 - self.level_width // 2)
         map_height, _ = self.map.getmaxyx()
         self.status_info = curses.newwin(3, 35, map_height + 2, 3)
         self.event_log = curses.newwin(height - (map_height + 6), width - 5,
