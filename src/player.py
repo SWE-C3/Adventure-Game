@@ -26,6 +26,18 @@ class Player:
         # Head + Chest + Trousers + Shoes + Weapon
         return self.default_strength + sum(self.items)
 
+    @property
+    def x(self):
+        return self.position.x
+
+    @property
+    def y(self):
+        return self.position.y
+
+    @property
+    def level(self):
+        return self.position.level
+
 
 class Position:
 
@@ -71,7 +83,7 @@ class Position:
 
     @level.setter
     def level(self, value):
-        self._level = max(1, min(self.max_level, value))
+        self._level = max(0, min(self.max_level, value))
 
     def __repr__(self):
         return f"Position(x={self.x}, y={self.y}, level={self.level})"
