@@ -4,11 +4,9 @@ Interfaces for help menus
 import curses
 import json
 from enum import Enum
-from os.path import join, abspath, dirname
 from pathlib import Path
 
 import constants
-import globals
 from user_interface import UserInterface
 from utility import table_centered
 
@@ -58,4 +56,5 @@ class Controls(UserInterface):
     def handle(self, key: int, previous):
         if key == constants.ESCAPE:
             return previous
+        previous.print()
         return self
