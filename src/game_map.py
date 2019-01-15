@@ -4,6 +4,7 @@ Game map interface
 import curses
 import random
 from pathlib import Path
+from typing import List, Set, Tuple
 
 import constants
 import globals
@@ -11,7 +12,7 @@ from dialog import Dialog
 from player import Player, Position
 from tower import Tower
 from user_interface import UserInterface
-from utility import color, option_dialog
+from utility import color
 
 
 class GameMap(UserInterface):
@@ -24,7 +25,7 @@ class GameMap(UserInterface):
     def __init__(self):
         super().__init__()
         self.tower = Tower()
-        self.health_bar = "||||||||||"
+        self.health_bar = "\u2764" * 10
         self.event_log = None
         self.map = None
         self.status_info = None
@@ -32,20 +33,36 @@ class GameMap(UserInterface):
         with (Path(__file__).parent.parent
               / 'resources'
               / 'levelfile.txt').open() as levels:
-            content = levels.read()
-            content = content.replace('-', constants.HORIZONTAL)
-            content = content.replace('|', constants.VERTICAL)
-            content = content.replace('+', constants.CROSS)
-            content = content.split('\n\n')
-            for level in content:
-                level = level.split('\n')
-                self.levels.append(level)
+            self.levels = self.parse_levels(levels.read())
         self.player = Player(Position(33, 13, layouts=self.levels))
-        self._last_position = (self.player.position.x, self.player.position.y)
-        self.current_position = (
-            self.player.position.x, self.player.position.y)
-        self.discovered = set()
+        self._last_position = self.current_position
+        self.discovered: List[Set[Tuple[int, int]]] = [set() for _ in
+                                                       range(len(self.levels))]
         self.setup()
+
+    @property
+    def current_value(self) -> str:
+        return self.levels[self.player.level][self.player.y][self.player.x]
+
+    @current_value.setter
+    def current_value(self, value: str):
+        self.levels[self.player.level][self.player.y][self.player.x] = value
+
+    @property
+    def current_position(self):
+        return self.player.x, self.player.y
+
+    @staticmethod
+    def parse_levels(content: str) -> List[List[List[str]]]:
+        content = content.replace('-', constants.HORIZONTAL)
+        content = content.replace('|', constants.VERTICAL)
+        content = content.replace('+', constants.CROSS)
+        return [[[char for char in row]
+                 for row in level.split('\n')]
+                for level in content.split('\n\n')]
+
+    def level_value(self, x_index: int, y_index: int) -> str:
+        return self.levels[self.player.level][y_index][x_index]
 
     def setup(self):
         self.screen = curses.newwin(0, 0)
@@ -75,16 +92,30 @@ class GameMap(UserInterface):
         if self.resized:
             self.resized = False
             self.setup()
-        self.screen.addstr(1, 3, f"Ebene {self.player.position.level}")
-        for y_index, row in enumerate(self.levels[self.player.position.level]):
+
+        self.screen.addstr(1, 3, f"Ebene {self.player.level}")
+        for y_index, row in enumerate(self.levels[self.player.level]):
             for x_index, value in enumerate(row):
-                if (x_index, y_index) not in self.discovered:
+                if (x_index, y_index) not in \
+                        self.discovered[self.player.level]:
                     self.map.addstr(y_index, x_index, ' ',
-                                    color(background=curses.COLOR_CYAN))
+                                    color(background=curses.COLOR_BLACK))
+                elif value == 'M':
+                    self.map.addstr(y_index, x_index, '\u2620',
+                                    color(foreground=curses.COLOR_RED))
+                elif value == 'I':
+                    self.map.addstr(y_index, x_index, '\u2734',
+                                    color(foreground=curses.COLOR_CYAN))
+                elif value == 'S':
+                    self.map.addstr(y_index, x_index, '\u2602',
+                                    color(foreground=curses.COLOR_BLUE))
+                elif value == '=':
+                    self.map.addstr(y_index, x_index, '\u2195',
+                                    color(foreground=curses.COLOR_GREEN))
                 else:
                     self.map.addstr(y_index, x_index, value)
-        self.map.addstr(self.player.position.y, self.player.position.x, "x",
-                        color(foreground=curses.COLOR_YELLOW))
+        self.map.addstr(self.current_position[1], self.current_position[0],
+                        '\u265f', color(foreground=curses.COLOR_YELLOW))
         self.status_info.addstr(1, 2, "HP: ")
         self.status_info.addstr(1, 6, self.health_bar,
                                 color(foreground=curses.COLOR_RED))
@@ -94,9 +125,10 @@ class GameMap(UserInterface):
         self.refresh()
 
     def discover(self, x_index: int, y_index: int):
-        for vertical in (-1, 0, 1):
-            for horizontal in (-1, 0, 1):
-                self.discovered.add((x_index + horizontal, y_index + vertical))
+        for vertical in range(-1, 2):
+            for horizontal in range(-1, 2):
+                self.discovered[self.player.level].add((x_index + horizontal,
+                                                        y_index + vertical))
 
     def update_health_bar(self, health):
         """
@@ -117,6 +149,8 @@ class GameMap(UserInterface):
                               message, color(foreground=curses.COLOR_YELLOW))
 
     def handle(self, key: int, previous=None):
+        self._last_position = self.current_position
+
         if key == constants.ESCAPE:
             return globals.PAUSE
         elif key == ord('i'):
@@ -133,32 +167,41 @@ class GameMap(UserInterface):
             self.player.position.x += 2
         elif key == ord('z'):
             return globals.STORY
-        self._last_position, self.current_position = self.current_position, (
-            self.player.position.x,
-            self.player.position.y)
-        self.discover(self.current_position[0], self.current_position[1])
-        current = \
-            self.levels[self.player.position.level][self.player.position.y][
-                self.player.position.x]
+
+        self.discover(*self.current_position)
+        for i in (-1, 1):
+            if self.level_value(self.current_position[0] + i,
+                                self.current_position[1]) == ' ':
+                self.discover(self.current_position[0] + i,
+                              self.current_position[1])
+            if self.level_value(self.current_position[0],
+                                self.current_position[1] + i) == ' ':
+                self.discover(self.current_position[0],
+                              self.current_position[1] + i)
+
         if self._last_position != self.current_position:
-            if current == 'M':
+            if self.current_value == 'M':
+                self.current_value = ' '
                 self.log_event("You are fighting a monster")
                 return globals.MONSTER
-            elif current == 'I':
+            elif self.current_value == 'I':
                 self.log_event('You have found an item')
-            elif current == 'S':
+            elif self.current_value == 'S':
                 return globals.SAVE_GAME
-            elif current == '=':
+            elif self.current_value == '=':
                 self.log_event('You found the ladder')
-            elif current == 'O':
+                self.player.position.level += 1
+                return globals.STORY
+            elif self.current_value == 'O':
                 self.log_event('You fell through a hole')
+                self.player.position.level -= 1
 
         return self
 
 
 class SaveGameDialog(Dialog):
     """
-    Dialog when creating new game
+    Dialog when accessing a save point
     """
 
     def __init__(self):
@@ -182,12 +225,12 @@ class SaveGameDialog(Dialog):
 
 class MonsterDialog(Dialog):
     """
-    Dialog when creating new game
+    Dialog when encountering a monster
     """
 
     def __init__(self):
         super().__init__()
-        self.success = random.randint(0, 10) < 3
+        self.success = random.randint(0, 10) < 5
         if self.success:
             self.question = 'Du kaempfst gegen ein Monster! ' \
                             'Und du besiegst es!'
@@ -201,13 +244,15 @@ class MonsterDialog(Dialog):
         if key == ord('o'):
             if self.success:
                 globals.MAP.log_event('You bested the monster!')
+            else:
+                globals.MAP.log_event('The monster overpowered you...')
+            self.success = random.randint(0, 10) < 5
+            if self.success:
                 self.question = 'Du kaempfst gegen ein Monster! ' \
                                 'Und du besiegst es!'
             else:
-                globals.MAP.log_event('The monster overpowered you...')
                 self.question = 'Du kaempfst gegen ein Monster! ' \
                                 'Und das Monster besiegt dich...'
-            self.success = random.randint(0, 10) < 3
             return globals.MAP
         globals.MAP.print()
         return self
