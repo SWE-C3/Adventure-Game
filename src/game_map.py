@@ -33,9 +33,11 @@ class GameMap(UserInterface):
         self.level_width = 51
         self.level_height = 15
         self.levels = list()
-        for file in (Path(__file__).parent.parent
-                     / 'resources' / 'levels').glob('*.level'):
-            self.levels.append(file.open().read())
+        for file in sorted((Path(__file__).parent.parent
+                            / 'resources' / 'levels').glob('*.level'),
+                           key=lambda x: int(x.stem)):
+            with file.open() as level:
+                self.levels.append(self.parse_level(level.read()))
         self.player = Player(Position(self.level_width, self.level_height,
                                       layouts=self.levels))
         self._last_position = self.current_position
