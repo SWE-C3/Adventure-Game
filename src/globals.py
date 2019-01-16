@@ -16,6 +16,4 @@ QUIT_GAME = None
 SAVE_GAME = None
 MONSTER = None
 
-INTERFACES: List[UserInterface] = (MAIN, MAP, INVENTORY, PAUSE, STORY,
-                                   CONTROLS_MAP, CONTROLS_INVENTORY, CREDITS,
-                                   NEW_GAME, QUIT_GAME, SAVE_GAME, MONSTER)
+INTERFACES: List[UserInterface] = list()
