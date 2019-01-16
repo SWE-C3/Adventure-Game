@@ -68,8 +68,8 @@ class Inventory(UserInterface):
             self.equipment_window.addstr(index * 3 + 2, 1,
                                          "Strength: strength")
         for index, cookie in enumerate(self.cookies):
-            self.cookie_window.addstr(1, index * 8, "Name")
-            self.cookie_window.addstr(2, index * 8, "+Amount")
+            self.cookie_window.addstr(1, index * 8 + 1, "Name")
+            self.cookie_window.addstr(2, index * 8 + 1, "+Amount")
         self.refresh()
 
     def handle(self, key: int, previous):
