@@ -2,6 +2,7 @@
 Utility module for reusable functions
 """
 import curses
+import itertools
 import textwrap
 from typing import List, Tuple
 
@@ -66,7 +67,10 @@ def option_dialog(window, question: str, options: List[str],
     """
     assert max(len(option) for option in options) <= dialog_width
     height, width = window.getmaxyx()
-    question_lines = textwrap.wrap(question, dialog_width - 2)
+    question_lines = question.split('\n')
+    question_lines = [textwrap.wrap(question_line, dialog_width - 2)
+                      for question_line in question_lines]
+    question_lines = list(itertools.chain.from_iterable(question_lines))
     dialog_height = len(question_lines) + len(options) + 3
     dialog = curses.newwin(dialog_height,
                            dialog_width,
