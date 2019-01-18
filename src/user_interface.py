@@ -11,6 +11,7 @@ class UserInterface:
         screen      Blank 'background' for the interface
                     Used to draw over previous interfaces
     """
+
     def __init__(self):
         self.resized = False
         self.screen = None

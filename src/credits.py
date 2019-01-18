@@ -4,7 +4,6 @@ Credits Interface
 import curses
 
 import constants
-import globals
 from user_interface import UserInterface
 
 
