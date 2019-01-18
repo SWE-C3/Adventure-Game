@@ -19,13 +19,11 @@ class Controls(UserInterface):
     def setup(self):
         self.screen = curses.newwin(0, 0)
         self.table = table_centered(self.screen,
-                                    ['Primary', 'Secondary', 'Action'],
+                                    ['Taste 1', 'Taste 2', 'Aktion'],
                                     self.items)
 
     def refresh(self):
-        self.screen.redrawwin()
         self.table.redrawwin()
-        self.screen.refresh()
         self.table.refresh()
 
     class Type(Enum):
