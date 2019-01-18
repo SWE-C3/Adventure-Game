@@ -24,7 +24,8 @@ class PauseMenu(Dialog):
         if key == ord('z'):
             return globals.MAP
         elif key == ord('s'):
-            return globals.NEW_GAME
+            globals.MAP.load_game('savegame.json')
+            return globals.MAP
         elif key == ord('q'):
             return globals.QUIT_GAME
         elif key == ord('m'):

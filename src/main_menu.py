@@ -3,20 +3,13 @@ Interfaces for the main menu
 """
 import curses
 import sys
+from pathlib import Path
 
 import globals
 from dialog import Dialog
 from game_map import GameMap
 from inventory import Inventory
 from user_interface import UserInterface
-
-
-def save_file():
-    """
-    save current game state to disk
-    :return: true if successful, false if not
-    """
-    return True
 
 
 class MainMenu(UserInterface):
@@ -26,7 +19,7 @@ class MainMenu(UserInterface):
 
     def __init__(self):
         super().__init__()
-        self.top = "--- Tower Explorer ---"
+        self.top = "--- Der Gefangene von Tavlou ---"
         self.logo = ["     |>>>  ",
                      "     |     ",
                      " _  _|_  _ ",
@@ -73,11 +66,11 @@ class MainMenu(UserInterface):
         if self.resized:
             self.resized = False
             self.setup()
-        if save_file():
-            self.menu_items = ["[N] Neues Spiel",
-                               "[F] Fortsetzen", "[Q] Beenden"]
+        if (Path(__file__).parent.parent / 'savegame.json').exists():
+            self.menu_items = ['[N] Neues Spiel', '[F] Fortsetzen',
+                               '[Q] Beenden']
         else:
-            self.menu_items = ["[N] Neues Spiel", "[Q] Beenden"]
+            self.menu_items = ['[N] Neues Spiel', '[Q] Beenden']
         height, width = self.screen.getmaxyx()
         y_pos_offset = height // 7 + 2 + len(self.logo[:height - 12])
         for item in self.menu_items:
@@ -94,6 +87,7 @@ class MainMenu(UserInterface):
         if key == ord('n'):
             return globals.NEW_GAME
         elif key == ord('f'):
+            globals.MAP.load_game('savegame.json')
             return globals.MAP
         elif key == ord('q'):
             return globals.QUIT_GAME
@@ -119,9 +113,10 @@ class NewGameDialog(Dialog):
         if key == ord('n'):
             return previous
         elif key == ord('j'):
+            globals.STORY.text = globals.STORY.stories['intro']
             globals.MAP = GameMap()
             globals.INVENTORY = Inventory()
-            return globals.MAP
+            return globals.STORY
         previous.print()
         return self
 

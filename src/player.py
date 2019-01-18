@@ -1,30 +1,56 @@
-"""
-Player - S -
-"""
-
-
 class Player:
-    """
-    This class defines the features and characteristics of an object Player.
-    """
-    default_health = 10  # Default health of Player
-    default_strength = 5  # Default strength of Player
+    default_health = 100
+    default_strength = 5
 
     def __init__(self, position=None):
         self.position = position or Position()
-        self.max_health = self.default_health
-        self.current_health = self.default_health
-        self.items = []
+        self.head = None
+        self.chest = None
+        self.legs = None
+        self.feet = None
+        self.weapon = None
         self.cookies = []
+        self._damage = 0
+
+    def add_item(self, item):
+        if item.type == 'Kopf':
+            self.head = item
+        elif item.type == 'Brust':
+            self.chest = item
+        elif item.type == 'Beine':
+            self.legs = item
+        elif item.type == 'Fuesse':
+            self.feet = item
+        elif item.type == 'Waffe':
+            self.weapon = item
+        elif item.type == 'Keks':
+            self.cookies.append(item)
+            if len(self.cookies) > 3:
+                del self.cookies[0]
+
+    @property
+    def damage(self):
+        return self._damage
+
+    @damage.setter
+    def damage(self, value):
+        self._damage = min(max(0, value), self.max_health)
+
+    @property
+    def max_health(self):
+        return self.default_health + sum(item.factor for item
+                                         in (self.head, self.chest,
+                                             self.legs, self.feet)
+                                         if item)
+
+    @property
+    def current_health(self):
+        return min(max(0, self.max_health - self.damage), self.max_health)
 
     @property
     def strength(self):
-        """
-        This defines the strength of Player
-        """
-        # default_strength + sum of the items:
-        # Head + Chest + Trousers + Shoes + Weapon
-        return self.default_strength + sum(self.items)
+        return self.default_strength + (self.weapon.factor
+                                        if self.weapon else 0)
 
     @property
     def x(self):
@@ -84,6 +110,3 @@ class Position:
     @level.setter
     def level(self, value):
         self._level = max(0, min(self.max_level, value))
-
-    def __repr__(self):
-        return f"Position(x={self.x}, y={self.y}, level={self.level})"
