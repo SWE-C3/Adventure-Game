@@ -21,8 +21,8 @@ def table_centered(window, headers: List[str], items: List[Tuple[str]]):
             max(max(len(item[index]) for item in items), len(header))
         )
     height, width = window.getmaxyx()
-    table_height = len(items) + 5
-    table_width = sum(max_column_lengths) + 3 * len(headers) + 1
+    table_height = len(items) + 4
+    table_width = sum(max_column_lengths) + 3 * len(headers) + 2
     table = curses.newwin(table_height, table_width,
                           height // 2 - table_height // 2,
                           width // 2 - table_width // 2)
