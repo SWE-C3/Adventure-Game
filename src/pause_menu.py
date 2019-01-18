@@ -14,10 +14,10 @@ class PauseMenu(Dialog):
     def __init__(self):
         super().__init__()
         self.question = 'Pause'
-        self.options = ["[Z] Zurück zur Karte",
+        self.options = ["[Z] Zurueck zur Karte",
                         "[S] Speicherstand laden",
                         "[Q] Spiel verlassen",
-                        "[M] Zum Hauptmenü"]
+                        "[M] Zum Hauptmenue"]
         self.setup()
 
     def handle(self, key: int, previous):

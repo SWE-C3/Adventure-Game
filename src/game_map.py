@@ -328,7 +328,7 @@ class GameMap(UserInterface):
 
         self.status_info.addstr(1, 17,
                                 f'{self.player.current_health:3}/{self.player.max_health:3}')
-        self.status_info.addstr(1, 27, f"Stärke: {self.player.strength}")
+        self.status_info.addstr(1, 27, f"Staerke: {self.player.strength}")
 
         self.refresh()
 
@@ -480,8 +480,8 @@ class MonsterDialog(Dialog):
         monster = globals.MAP.monsters[(player.level,
                                         *globals.MAP.current_position)]
 
-        self.question = f'Du kämpfst gegen das Monster:\n{monster}\n' \
-            f'Stärke: {monster.strength}'
+        self.question = f'Du kaempfst gegen das Monster:\n{monster}\n' \
+            f'Staerke: {monster.strength}'
 
         if player.strength >= monster.strength:
             self.question += '\nUnd du besiegst es!'
@@ -543,7 +543,7 @@ class ItemDialog(Dialog):
 
         self.question = 'Du hast einen Gegenstand gefunden!\n' \
             f'Name: {self.item}\n' \
-            f'Stärke: {self.item.factor}'
+            f'Staerke: {self.item.factor}'
         other_item = None
         if self.item.type == 'Kopf':
             other_item = globals.MAP.player.head
@@ -560,7 +560,7 @@ class ItemDialog(Dialog):
         if other_item:
             self.question += f'\nDu hast bereits diesen Gegenstand:\n' \
             f'Name: {other_item}\n' \
-            f'Stärke: {other_item.factor}'
+            f'Staerke: {other_item.factor}'
             self.options = ['[J] Austauschen', '[N] Liegen lassen']
         self.setup()
 

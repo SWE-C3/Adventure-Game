@@ -19,7 +19,7 @@ class Consumable:
 
 
 class Equipment:
-    adjectives = ('hart', 'exquisit', 'rostig', 'glänzend')
+    adjectives = ('hart', 'exquisit', 'rostig', 'glaenzend')
     heads = ('e Kappe', 'er Helm')
     chests = ('e Ruestung', 'es Kettenhemd')
     legs = ('e Hose', 'e Kniepanzer')

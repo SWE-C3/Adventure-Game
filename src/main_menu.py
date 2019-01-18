@@ -103,8 +103,8 @@ class NewGameDialog(Dialog):
 
     def __init__(self):
         super().__init__()
-        self.question = "Wenn du ein neues Spiel anfängst, " \
-                        "wird dein bisheriger Fortschritt gelöscht. " \
+        self.question = "Wenn du ein neues Spiel anfaengst, " \
+                        "wird dein bisheriger Fortschritt geloescht. " \
                         "Bist du dir sicher?"
         self.options = ["[J] Ja", "[N] Nein"]
         self.setup()
