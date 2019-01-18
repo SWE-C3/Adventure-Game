@@ -2,6 +2,7 @@
 Utility module for reusable functions
 """
 import curses
+import itertools
 import textwrap
 from typing import List, Tuple
 
@@ -21,8 +22,8 @@ def table_centered(window, headers: List[str], items: List[Tuple[str]]):
             max(max(len(item[index]) for item in items), len(header))
         )
     height, width = window.getmaxyx()
-    table_height = len(items) + 5
-    table_width = sum(max_column_lengths) + 3 * len(headers) + 1
+    table_height = len(items) + 4
+    table_width = sum(max_column_lengths) + 3 * len(headers) + 2
     table = curses.newwin(table_height, table_width,
                           height // 2 - table_height // 2,
                           width // 2 - table_width // 2)
@@ -66,7 +67,10 @@ def option_dialog(window, question: str, options: List[str],
     """
     assert max(len(option) for option in options) <= dialog_width
     height, width = window.getmaxyx()
-    question_lines = textwrap.wrap(question, dialog_width - 2)
+    question_lines = question.split('\n')
+    question_lines = [textwrap.wrap(question_line, dialog_width - 2)
+                      for question_line in question_lines]
+    question_lines = list(itertools.chain.from_iterable(question_lines))
     dialog_height = len(question_lines) + len(options) + 3
     dialog = curses.newwin(dialog_height,
                            dialog_width,
@@ -83,3 +87,22 @@ def option_dialog(window, question: str, options: List[str],
                       option)
     dialog.border()
     return dialog
+
+
+COLOR_ID = 0
+COLORS = {}
+
+
+def color(foreground: int = curses.COLOR_WHITE,
+          background: int = curses.COLOR_BLACK):
+    if (foreground, background) in COLORS:
+        return curses.color_pair(COLORS[(foreground, background)])
+    global COLOR_ID
+    COLOR_ID += 1
+    try:
+        curses.init_pair(COLOR_ID, foreground, background)
+    except:
+        COLOR_ID = 1
+        curses.init_pair(COLOR_ID, foreground, background)
+    COLORS[(foreground, background)] = COLOR_ID
+    return curses.color_pair(COLOR_ID)
