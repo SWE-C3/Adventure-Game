@@ -112,7 +112,7 @@ class GameMap(UserInterface):
             json.dump(data, file, default=lambda x: vars(x))
 
     def load_game(self, filename: str):
-        with open(filename) as file:
+        with (Path(__file__).parent.parent / filename).open() as file:
             data = json.load(file)
         for position, monster_data in data['monsters'].items():
             position = tuple(int(i) for i in position[1:-1].split(', '))
