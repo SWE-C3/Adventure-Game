@@ -96,7 +96,7 @@ class Inventory(UserInterface):
 
     def handle(self, key: int, previous):
         player = globals.MAP.player
-        if key == constants.ESCAPE:
+        if key in (constants.ESCAPE, constants.TAB ,ord('i')):
             return globals.MAP
         elif key == ord('h'):
             return globals.CONTROLS_INVENTORY

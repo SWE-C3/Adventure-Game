@@ -62,7 +62,7 @@ class GameMap(UserInterface):
     @property
     def health_bar(self):
         health_bar = int(10 * (self.player.current_health
-                               / self.player.max_health)) * '\u2764'
+                               / self.player.max_health)) * constants.HEALTH
         return health_bar
 
     @property
@@ -104,7 +104,8 @@ class GameMap(UserInterface):
             'visited': [[list(position) for position in level] for level in
                         self.visited],
             'seen': [[list(position) for position in level] for level in
-                     self.seen]
+                     self.seen],
+            'stories_shown': list(self.stories_shown)
         }
         with (Path(__file__).parent.parent / 'savegame.json').open(mode='w') \
                 as file:
@@ -112,7 +113,7 @@ class GameMap(UserInterface):
             json.dump(data, file, default=lambda x: vars(x))
 
     def load_game(self, filename: str):
-        with open(filename) as file:
+        with (Path(__file__).parent.parent / filename).open() as file:
             data = json.load(file)
         for position, monster_data in data['monsters'].items():
             position = tuple(int(i) for i in position[1:-1].split(', '))
@@ -179,6 +180,7 @@ class GameMap(UserInterface):
                         data['visited']]
         self.seen = [set(tuple(position) for position in level) for level in
                      data['seen']]
+        self.stories_shown = set(data['stories_shown'])
 
     def parse_level(self, level: str, level_number: int) -> List[List[str]]:
         level = level.replace('-', constants.HORIZONTAL)
@@ -294,31 +296,31 @@ class GameMap(UserInterface):
                                     color(foreground=curses.COLOR_BLUE))
                 elif (x_index, y_index) \
                         not in self.visited[self.player.level] \
-                        and value in ('M', 'O', 'I', 'X', '=', '%'):
-                    self.map.addstr(y_index, x_index, '?',
+                        and value in ('M', 'O', 'I'):
+                    self.map.addstr(y_index, x_index, constants.UNKNOWN,
                                     color(foreground=curses.COLOR_MAGENTA))
                 elif value == 'I':
-                    self.map.addstr(y_index, x_index, '\u2734',
+                    self.map.addstr(y_index, x_index, constants.ITEM,
                                     color(foreground=curses.COLOR_CYAN))
                 elif value == 'X':
-                    self.map.addstr(y_index, x_index, '\u2602',
+                    self.map.addstr(y_index, x_index, constants.SAVEPOINT,
                                     color(foreground=curses.COLOR_BLUE))
                 elif value == '=':
-                    self.map.addstr(y_index, x_index, '\u2197',
+                    self.map.addstr(y_index, x_index, constants.LADDER_UP,
                                     color(foreground=curses.COLOR_GREEN))
                 elif value == '%':
-                    self.map.addstr(y_index, x_index, '\u2198',
+                    self.map.addstr(y_index, x_index, constants.LADDER_DOWN,
                                     color(foreground=curses.COLOR_GREEN))
                 elif value == 'M':
-                    self.map.addstr(y_index, x_index, '\u2620',
+                    self.map.addstr(y_index, x_index, constants.MONSTER,
                                     color(foreground=curses.COLOR_RED))
-                elif value == 'S':
-                    self.map.addstr(y_index, x_index, ' ')
+                elif value == 'O':
+                    self.map.addstr(y_index, x_index, constants.HOLE)
                 else:
                     self.map.addstr(y_index, x_index, value)
 
         self.map.addstr(self.current_position[1], self.current_position[0],
-                        '\u265f', color(foreground=curses.COLOR_YELLOW))
+                        constants.PLAYER, color(foreground=curses.COLOR_YELLOW))
 
         self.status_info.addstr(1, 2, "HP: ")
         self.status_info.addstr(1, 6, 10 * ' ',
@@ -328,7 +330,7 @@ class GameMap(UserInterface):
 
         self.status_info.addstr(1, 17,
                                 f'{self.player.current_health:3}/{self.player.max_health:3}')
-        self.status_info.addstr(1, 27, f"Stärke: {self.player.strength}")
+        self.status_info.addstr(1, 27, f"Staerke: {self.player.strength}")
 
         self.refresh()
 
@@ -337,9 +339,9 @@ class GameMap(UserInterface):
 
         if self.player.current_health < 1:
             return globals.GAME_OVER
-        elif key == constants.ESCAPE:
+        elif key in (constants.ESCAPE, constants.SPACE):
             return globals.PAUSE
-        elif key == ord('i'):
+        elif key in (constants.TAB, ord('i')):
             return globals.INVENTORY
         elif key == ord('h'):
             return globals.CONTROLS_MAP
@@ -400,7 +402,7 @@ class LadderDialog(Dialog):
         super().print()
 
     def handle(self, key: int, previous: 'UserInterface'):
-        if key == ord('j'):
+        if key in (ord('j'), constants.ENTER):
             self.initialized = False
             if self.upwards:
                 globals.MAP.log_event('Du bist eine Leiter hinaufgestiegen')
@@ -442,7 +444,7 @@ class SaveGameDialog(Dialog):
         if key == ord('n'):
             globals.MAP.log_event('Du hast das Spiel nicht gespeichert')
             return globals.MAP
-        elif key == ord('j'):
+        elif key in (ord('j'), constants.ENTER):
             globals.MAP.save_game()
             globals.MAP.log_event('Du hast das Spiel gespeichert')
             return globals.MAP
@@ -480,8 +482,8 @@ class MonsterDialog(Dialog):
         monster = globals.MAP.monsters[(player.level,
                                         *globals.MAP.current_position)]
 
-        self.question = f'Du kämpfst gegen das Monster:\n{monster}\n' \
-            f'Stärke: {monster.strength}'
+        self.question = f'Du kaempfst gegen das Monster:\n{monster}\n' \
+            f'Staerke: {monster.strength}'
 
         if player.strength >= monster.strength:
             self.question += '\nUnd du besiegst es!'
@@ -524,7 +526,7 @@ class ItemDialog(Dialog):
         super().print()
 
     def handle(self, key: int, previous: 'UserInterface'):
-        if key == ord('j'):
+        if key in (ord('j'), constants.ENTER):
             self.initialized = False
             globals.MAP.player.add_item(self.item)
             globals.MAP.current_value = ' '
@@ -543,7 +545,8 @@ class ItemDialog(Dialog):
 
         self.question = 'Du hast einen Gegenstand gefunden!\n' \
             f'Name: {self.item}\n' \
-            f'Stärke: {self.item.factor}'
+            f'Staerke: {self.item.factor}'
+        self.options = ['[J] Aufnehmen', '[N] Liegen lassen']
         other_item = None
         if self.item.type == 'Kopf':
             other_item = globals.MAP.player.head
@@ -560,8 +563,8 @@ class ItemDialog(Dialog):
         if other_item:
             self.question += f'\nDu hast bereits diesen Gegenstand:\n' \
             f'Name: {other_item}\n' \
-            f'Stärke: {other_item.factor}'
-            self.options = ['[J] Austauschen', '[N] Liegen lassen']
+            f'Staerke: {other_item.factor}'
+            self.options[0] = '[J] Austauschen'
         self.setup()
 
 
