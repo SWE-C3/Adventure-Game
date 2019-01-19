@@ -296,7 +296,7 @@ class GameMap(UserInterface):
                                     color(foreground=curses.COLOR_BLUE))
                 elif (x_index, y_index) \
                         not in self.visited[self.player.level] \
-                        and value in ('M', 'O', 'I', 'X', '=', '%'):
+                        and value in ('M', 'O', 'I'):
                     self.map.addstr(y_index, x_index, constants.UNKNOWN,
                                     color(foreground=curses.COLOR_MAGENTA))
                 elif value == 'I':
