@@ -52,7 +52,7 @@ class Controls(UserInterface):
         self.refresh()
 
     def handle(self, key: int, previous):
-        if key == constants.ESCAPE:
+        if key in (constants.ESCAPE, ord('h')):
             return previous
         previous.print()
         return self

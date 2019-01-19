@@ -339,9 +339,9 @@ class GameMap(UserInterface):
 
         if self.player.current_health < 1:
             return globals.GAME_OVER
-        elif key == constants.ESCAPE:
+        elif key in (constants.ESCAPE, constants.SPACE):
             return globals.PAUSE
-        elif key == ord('i'):
+        elif key in (constants.TAB, ord('i')):
             return globals.INVENTORY
         elif key == ord('h'):
             return globals.CONTROLS_MAP
@@ -402,7 +402,7 @@ class LadderDialog(Dialog):
         super().print()
 
     def handle(self, key: int, previous: 'UserInterface'):
-        if key == ord('j'):
+        if key in (ord('j'), constants.ENTER):
             self.initialized = False
             if self.upwards:
                 globals.MAP.log_event('Du bist eine Leiter hinaufgestiegen')
@@ -444,7 +444,7 @@ class SaveGameDialog(Dialog):
         if key == ord('n'):
             globals.MAP.log_event('Du hast das Spiel nicht gespeichert')
             return globals.MAP
-        elif key == ord('j'):
+        elif key in (ord('j'), constants.ENTER):
             globals.MAP.save_game()
             globals.MAP.log_event('Du hast das Spiel gespeichert')
             return globals.MAP
@@ -526,7 +526,7 @@ class ItemDialog(Dialog):
         super().print()
 
     def handle(self, key: int, previous: 'UserInterface'):
-        if key == ord('j'):
+        if key in (ord('j'), constants.ENTER):
             self.initialized = False
             globals.MAP.player.add_item(self.item)
             globals.MAP.current_value = ' '
