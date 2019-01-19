@@ -546,6 +546,7 @@ class ItemDialog(Dialog):
         self.question = 'Du hast einen Gegenstand gefunden!\n' \
             f'Name: {self.item}\n' \
             f'Staerke: {self.item.factor}'
+        self.options = ['[J] Aufnehmen', '[N] Liegen lassen']
         other_item = None
         if self.item.type == 'Kopf':
             other_item = globals.MAP.player.head
@@ -563,7 +564,7 @@ class ItemDialog(Dialog):
             self.question += f'\nDu hast bereits diesen Gegenstand:\n' \
             f'Name: {other_item}\n' \
             f'Staerke: {other_item.factor}'
-            self.options = ['[J] Austauschen', '[N] Liegen lassen']
+            self.options[0] = '[J] Austauschen'
         self.setup()
 
 
