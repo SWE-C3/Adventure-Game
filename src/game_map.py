@@ -104,7 +104,8 @@ class GameMap(UserInterface):
             'visited': [[list(position) for position in level] for level in
                         self.visited],
             'seen': [[list(position) for position in level] for level in
-                     self.seen]
+                     self.seen],
+            'stories_shown': list(self.stories_shown)
         }
         with (Path(__file__).parent.parent / 'savegame.json').open(mode='w') \
                 as file:
@@ -179,6 +180,7 @@ class GameMap(UserInterface):
                         data['visited']]
         self.seen = [set(tuple(position) for position in level) for level in
                      data['seen']]
+        self.stories_shown = set(data['stories_shown'])
 
     def parse_level(self, level: str, level_number: int) -> List[List[str]]:
         level = level.replace('-', constants.HORIZONTAL)
