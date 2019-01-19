@@ -42,7 +42,7 @@ class StoryScreen(UserInterface):
 
     @upper.setter
     def upper(self, value):
-        self._upper = min(len(self.text) - self.story_height, max(0, value))
+        self._upper = max(0, min(len(self.text) - self.story_height, value))
 
     def setup(self):
         self.screen = curses.newwin(0, 0)
