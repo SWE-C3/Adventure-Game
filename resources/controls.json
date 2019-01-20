@@ -3,64 +3,64 @@
     {
       "primary_key": "1",
       "secondary_key": "",
-      "action": "use slot 1"
+      "action": "benutze Keks 1"
     },
     {
       "primary_key": "2",
       "secondary_key": "",
-      "action": "use slot 2"
+      "action": "benutze Keks 2"
     },
     {
       "primary_key": "3",
       "secondary_key": "",
-      "action": "use slot 3"
+      "action": "benutze Keks 3"
     },
     {
       "primary_key": "I",
-      "secondary_key": "",
-      "action": "close inventory"
+      "secondary_key": "TAB",
+      "action": "Inventar schliessen"
     },
     {
       "primary_key": "H",
       "secondary_key": "",
-      "action": "open this menu"
+      "action": "Hilfmenue oeffnen"
     }
   ],
   "game_map": [
     {
       "primary_key": "W",
       "secondary_key": "UP",
-      "action": "move north"
+      "action": "nach oben bewegen"
     },
     {
       "primary_key": "A",
       "secondary_key": "LEFT",
-      "action": "move west"
+      "action": "nach links bewegen"
     },
     {
       "primary_key": "S",
       "secondary_key": "DOWN",
-      "action": "move south"
+      "action": "nach unten bewegen"
     },
     {
       "primary_key": "D",
       "secondary_key": "RIGHT",
-      "action": "move east"
+      "action": "nach rechts bewegen"
     },
     {
       "primary_key": "I",
-      "secondary_key": "",
-      "action": "open inventory"
+      "secondary_key": "TAB",
+      "action": "Inventar oeffnen"
     },
     {
       "primary_key": "ESC",
-      "secondary_key": "",
-      "action": "open pause menu"
+      "secondary_key": "SPACE",
+      "action": "Pausenmenue oeffnen"
     },
     {
       "primary_key": "H",
       "secondary_key": "",
-      "action": "open this menu"
+      "action": "Hilfsmenue oeffnen"
     }
   ]
 }

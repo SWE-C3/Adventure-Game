@@ -1,95 +1,66 @@
-"""
-Item classes
-"""
-
-import json
 import random
-from os.path import join, abspath, dirname
-from enum import Enum
 
 
-class Item:
-    """
-    Item main class
-    """
+class Consumable:
+    adjectives = ('gross', 'weich', 'glitzernd', 'saftig')
+    cookies = ('er Butterkeks', 'er Vanillekipferl', 'er Spritzkringel',
+               'er Spekulatius', 'e Makrone', 'e Nussecke', 'e Rumkugel')
 
-    def __init__(self):
-        self.name = None
+    def __init__(self, level: int):
+        self.type = 'Keks'
+        self.name = self.generate_name()
+        self.factor = level * 20 + random.randint(level * 10 * -1, level * 10)
 
-    def set(self, name):
-        """
-        need that because nametuple is not mutable
-        """
-        self.name = name
-
-
-class Healing(Item):
-    """
-    Healing_Item is a subclass of Item with the additional attribute health
-    """
-
-    def __init__(self):
-        super().__init__()
-        self.health = None
-
-    def set_random_name(self):
-        """
-        randomly sets a name from the given json file
-        """
-        with open(join(dirname(abspath(__file__)), '..',
-                       'resources', 'items.json')) as items:
-            data = json.load(items)
-        self.name = random.choice(data["Healing_name"])
-
-    def set_auto(self, level_number):
-        """
-        automatically sets the values according to the level
-        """
-        self.set_random_name()
-        self.health = random.randint(
-            ((level_number-1)*10), (level_number*10))  # temporary calculation
+    def generate_name(self) -> str:
+        return random.choice(self.adjectives) + random.choice(self.cookies)
 
     def __str__(self):
-        """
-        To String
-        """
-        return "Name: " + self.name + "  Health_Power: " + str(self.health)
+        return self.name
 
 
-class Equipment(Item):
-    """
-    Equipment is a subclass of Item with the additional attribute strength,
-    you have to set a predefined part for initialization
-    """
+class Equipment:
+    adjectives = ('hart', 'exquisit', 'rostig', 'glaenzend')
+    heads = ('e Kappe', 'er Helm')
+    chests = ('e Ruestung', 'es Kettenhemd')
+    legs = ('e Hose', 'e Kniepanzer')
+    feet = ('e Stiefel', 'e Latschen')
 
-    type = Enum("Type", "Weapon Helmet Body Pants Shoes")
-
-    def __init__(self):
-        super().__init__()
-        self.strength = None
+    def __init__(self, level: int):
         self.type = None
+        self.name = self.generate_name()
+        self.factor = level * 20 + random.randint(level * 10 * -1, level * 10)
 
-    def set_random_name(self):
-        """
-        randomly sets a name from the given json file
-        """
-        with open(join(dirname(abspath(__file__)), '..',
-                       'resources', 'items.json')) as items:
-            data = json.load(items)
-        file_name = self.type + "_name"
-        self.name = random.choice(data[file_name])
-
-    def set_auto(self, level_number):
-        """
-        automatically sets the values according to the level
-        """
-        self.set_random_name()
-        self.strength = random.randint(
-            ((level_number-1)*10), (level_number*10))  # temporary calculation
+    def generate_name(self) -> str:
+        equipment_type = random.choice(('head', 'chest', 'legs', 'feet'))
+        adjcetive = random.choice(self.adjectives)
+        if equipment_type == 'head':
+            self.type = 'Kopf'
+            return adjcetive + random.choice(self.heads)
+        elif equipment_type == 'chest':
+            self.type = 'Brust'
+            return adjcetive + random.choice(self.chests)
+        elif equipment_type == 'legs':
+            self.type = 'Beine'
+            return adjcetive + random.choice(self.legs)
+        else:
+            self.type = 'Fuesse'
+            return adjcetive + random.choice(self.feet)
 
     def __str__(self):
-        """
-        To String
-        """
-        return ("Name: " + self.name + "  Type: " + self.type
-                + "  Strength: " + str(self.strength))
+        return self.name
+
+
+class Weapon:
+    adjectives = ('spitz', 'schwer', 'gross', 'perfekt')
+    nouns = ('es Schwert', 'er Knueppel', 'er Morgenstern', 'er Dolch')
+
+    def __init__(self, level: int):
+        self.type = 'Waffe'
+        self.name = self.generate_name()
+        self.factor = level * 25 + random.randint(level * 10 * -1, level * 10)
+
+    def generate_name(self) -> str:
+        return random.choice(self.adjectives) + random.choice(self.nouns)
+
+    def __str__(self):
+        return self.name

@@ -1,38 +1,34 @@
 """
 Interfaces for the pause menu
 """
+import constants
+import globals
+from dialog import Dialog
 
-import curses
 
-
-class PauseMenu:
+class PauseMenu(Dialog):
     """
     Interface class for pause menu
     """
 
-    def __init__(self, screen):
-        self.menu_items = ["[Z] Zurück zur Karte",
-                           "[S] Speicherstand laden", "[Q] Spiel verlassen"]
-        self.screen = screen
+    def __init__(self):
+        super().__init__()
+        self.question = 'Pause'
+        self.options = ["[Z] Zurueck zur Karte",
+                        "[S] Speicherstand laden",
+                        "[Q] Spiel verlassen",
+                        "[M] Zum Hauptmenue"]
+        self.setup()
 
-    def print(self):
-        """
-        render pause menu to terminal window
-        """
-
-        # get a tuple (y, x) - height, width of the window
-        size = self.screen.getmaxyx()
-
-        # create new window for menu
-        menu_item_win = curses.newwin(size[0], size[1], 0, 0)
-        # y_pos_offset to set items vertical below each other
-        y_pos_offset = (size[0] // 2) - 2
-
-        # for each item in menu_items add the menu text
-        for item in self.menu_items:
-            menu_item_win.addstr(y_pos_offset, (
-                size[1] // 2) - (len(item) // 2), item)
-            y_pos_offset += 1
-
-        # refresh menu_item_win
-        menu_item_win.refresh()
+    def handle(self, key: int, previous):
+        if key in (ord('z'), constants.SPACE):
+            return globals.MAP
+        elif key == ord('s'):
+            globals.MAP.load_game('savegame.json')
+            return globals.MAP
+        elif key == ord('q'):
+            return globals.QUIT_GAME
+        elif key == ord('m'):
+            return globals.MAIN
+        previous.print()
+        return self

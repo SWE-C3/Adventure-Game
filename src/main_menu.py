@@ -2,166 +2,142 @@
 Interfaces for the main menu
 """
 import curses
+import sys
+from pathlib import Path
+
+import globals
+from dialog import Dialog
+from game_map import GameMap
+from inventory import Inventory
+from user_interface import UserInterface
 
 
-def save_file():
-    """
-    save current game state to disk
-    :return: true if successful, false if not
-    """
-    return True
-
-
-class MainMenu:
+class MainMenu(UserInterface):
     """
     Interface class for main menu
     """
 
-    def __init__(self, screen):
-        self.screen = screen
-        self.top = "--- Tower Explorer ---"
-        self.logo = ["     |>>>  ", "     |     ", " _  _|_  _ ",
+    def __init__(self):
+        super().__init__()
+        self.top = "--- Der Gefangene von Tavlou ---"
+        self.logo = ["     |>>>  ",
+                     "     |     ",
+                     " _  _|_  _ ",
                      "|;|_|;|_|;|",
-                     r"\\.    .  /", r" \\:  .  / ", "  ||:   |  ",
-                     "  ||:.  |  ",
-                     "  ||:  .|  ", "  ||:   |  ", "  ||: , |  ",
+                     r"\\.    .  /",
+                     r" \\:  .  / ",
                      "  ||:   |  ",
-                     "  ||:   |  ", "  ||: . |  ", "  ||_   |  ", " ", " "]
+                     "  ||:.  |  ",
+                     "  ||:  .|  ",
+                     "  ||:   |  ",
+                     "  ||: , |  ",
+                     "  ||:   |  ",
+                     "  ||:   |  ",
+                     "  ||: . |  ",
+                     "  ||_   |  "]
+        self.menu_items = ["[N] Neues Spiel", "[Q] Beenden"]
+        self.credits = "[C] Credits"
+        self.menu_item_win = None
+        self.setup()
 
-        if save_file():
-            self.menu_items = ["[n] Neues Spiel",
-                               "[f] Fortsetzen", "[b] Beenden"]
-        else:
-            self.menu_items = ["[n] Neues Spiel", "[b] Beenden"]
-        self.credits = "[c] Credits"
+    def setup(self):
+        self.screen = curses.newwin(0, 0)
+        height, width = self.screen.getmaxyx()
+        self.menu_item_win = curses.newwin(height, width, 0, 0)
+        y_pos_offset = height // 7 - 2
+        self.menu_item_win.addstr(y_pos_offset,
+                                  width // 2 - len(self.top) // 2, self.top)
+        y_pos_offset += 3
+        for item in self.logo[:height - 12]:
+            self.menu_item_win.addstr(y_pos_offset,
+                                      width // 2 - len(item) // 2, item)
+            y_pos_offset += 1
+
+    def refresh(self):
+        self.screen.redrawwin()
+        self.menu_item_win.redrawwin()
+        self.screen.refresh()
+        self.menu_item_win.refresh()
 
     def print(self):
         """
         render main menu to terminal window
         """
-        # get a tuple (y, x) - height, width of the window
-        size = self.screen.getmaxyx()
-
-        # create new window for menu
-        menu_item_win = curses.newwin(size[0], size[1], 0, 0)
-        # y_pos_offset to set items vertical below each other
-        y_pos_offset = size[0] // 7 - 2
-
-        #
-        menu_item_win.addstr(
-            y_pos_offset, size[1] // 2 - len(self.top) // 2, self.top)
-        # increment y_pos_offset by one
-        y_pos_offset += 3
-
-        # for each item in menu_logo add the menu text
-        for item in self.logo:
-            menu_item_win.addstr(y_pos_offset,
-                                 size[1] // 2 - len(item) // 2, item)
-            y_pos_offset += 1
-
-        # for each item in menu_items add the menu text
+        if self.resized:
+            self.resized = False
+            self.setup()
+        if (Path(__file__).parent.parent / 'savegame.json').exists():
+            self.menu_items = ['[N] Neues Spiel', '[F] Fortsetzen',
+                               '[Q] Beenden']
+        else:
+            self.menu_items = ['[N] Neues Spiel', '[Q] Beenden']
+        height, width = self.screen.getmaxyx()
+        y_pos_offset = height // 7 + 2 + len(self.logo[:height - 12])
         for item in self.menu_items:
-            menu_item_win.addstr(y_pos_offset,
-                                 size[1] // 2 - len(item) // 2, item)
-            # increment y_pos_offset by one
             y_pos_offset += 1
-
+            self.menu_item_win.addstr(y_pos_offset,
+                                      width // 2 - len(item) // 2, item)
         y_pos_offset += 1
-        menu_item_win.addstr(y_pos_offset,
-                             size[1] // 2 - len(self.credits) // 2,
-                             self.credits)
-        y_pos_offset += 1
+        self.menu_item_win.addstr(y_pos_offset,
+                                  width // 2 - len(self.credits) // 2,
+                                  self.credits)
+        self.refresh()
 
-        # refresh menu_item_win
-        menu_item_win.refresh()
+    def handle(self, key: int, previous):
+        if key == ord('n'):
+            return globals.NEW_GAME
+        elif key == ord('f'):
+            globals.MAP.load_game('savegame.json')
+            return globals.MAP
+        elif key == ord('q'):
+            return globals.QUIT_GAME
+        elif key == ord('c'):
+            return globals.CREDITS
+        return self
 
 
-class NewGameWindow:
+class NewGameDialog(Dialog):
     """
     Dialog when creating new game
     """
 
-    def __init__(self, screen):
-        self.screen = screen
-        self.pressed_key = ord('z')
-        self.text1 = "Wenn du ein neues Spiel anfängst, " \
-                     "wird dein bisheriger Fortschritt gelöscht."
-        self.text2 = "Bist du dir sicher?"
-        self.text3 = "--------------------------"
-        self.menu_items = ["[j] Ja", "[n] Nein"]
+    def __init__(self):
+        super().__init__()
+        self.question = "Wenn du ein neues Spiel anfaengst, " \
+                        "wird dein bisheriger Fortschritt geloescht. " \
+                        "Bist du dir sicher?"
+        self.options = ["[J] Ja", "[N] Nein"]
+        self.setup()
 
-    def print(self):
-        """
-        render dialog to terminal window
-        """
-        size = self.screen.getmaxyx()
-
-        # create new window for menu
-        new_item_win = curses.newwin(size[0], size[1], 0, 0)
-        # y_pos_offset to set items vertical below each other
-        y_pos_offset = size[0] // 2 - 2
-
-        new_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text1) // 2, self.text1)
-        y_pos_offset += 1
-        new_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text2) // 2, self.text2)
-        y_pos_offset += 1
-        new_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text3) // 2, self.text3)
-        y_pos_offset += 1
-
-        # for each item in menu_items add the menu text
-        for item in self.menu_items:
-            new_item_win.addstr(y_pos_offset,
-                                size[1] // 2 - len(item) // 2, item)
-            # increment y_pos_offset by one
-            y_pos_offset += 1
-
-        # refresh menu_item_win
-        new_item_win.refresh()
+    def handle(self, key: int, previous):
+        if key == ord('n'):
+            return previous
+        elif key == ord('j'):
+            globals.STORY.text = globals.STORY.stories['intro']
+            globals.MAP = GameMap()
+            globals.INVENTORY = Inventory()
+            return globals.STORY
+        previous.print()
+        return self
 
 
-class EndGameWindow:
+class EndGameDialog(Dialog):
     """
     Dialog when quitting the game
     """
 
-    def __init__(self, screen):
-        self.screen = screen
-        self.pressed_key = ord('z')
-        self.text1 = "Nicht gespeicherte Fortschritte gehen verloren!"
-        self.text2 = "Beenden?"
-        self.text3 = "--------------"
-        self.menu_items = ["[j] Ja", "[n] Nein"]
+    def __init__(self):
+        super().__init__()
+        self.question = "Nicht gespeicherte Fortschritte gehen verloren! " \
+                        "Beenden?"
+        self.options = ["[J] Ja", "[N] Nein"]
+        self.setup()
 
-    def print(self):
-        """
-        render dialog to terminal window
-        """
-        size = self.screen.getmaxyx()
-
-        # create new window for menu
-        end_item_win = curses.newwin(size[0], size[1], 0, 0)
-        # offset to set items vertical below each other
-        y_pos_offset = size[0] // 2 - 2
-
-        end_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text1) // 2, self.text1)
-        y_pos_offset += 1
-        end_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text2) // 2, self.text2)
-        y_pos_offset += 1
-        end_item_win.addstr(y_pos_offset,
-                            size[1] // 2 - len(self.text3) // 2, self.text3)
-        y_pos_offset += 1
-
-        # for each item in menu_items add the menu text
-        for item in self.menu_items:
-            end_item_win.addstr(y_pos_offset,
-                                size[1] // 2 - len(item) // 2, item)
-            # increment offset by one
-            y_pos_offset += 1
-
-        # refresh menu_item_win
-        end_item_win.refresh()
+    def handle(self, key: int, previous):
+        if key == ord('n'):
+            return previous
+        elif key == ord('j'):
+            curses.endwin()
+            sys.exit()
+        previous.print()
+        return self
