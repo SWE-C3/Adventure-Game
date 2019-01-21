@@ -376,9 +376,10 @@ class GameMap(UserInterface):
                 globals.LADDER.upwards = False
                 return globals.LADDER
             elif self.current_value == 'O':
-                self.visit(*self.current_position)
-                self.log_event('Du bist durch ein Loch gefallen')
-                self.player.position.level -= 1
+                if 0 <= self.player.level < len(self.visited):
+                    self.visit(*self.current_position)
+                    self.log_event('Du bist durch ein Loch gefallen')
+                    self.player.position.level -= 1
         return self
 
 
