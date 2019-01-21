@@ -278,16 +278,17 @@ class GameMap(UserInterface):
         self.screen.addstr(1, 3, f"Ebene {self.player.level}")
         self.screen.addstr(1, 20, f'Position: {self.current_position}')
 
-        self.visit(*self.current_position)
-        for i in (-1, 1):
-            if self.level_value(self.current_position[0] + i,
-                                self.current_position[1]) == ' ':
-                self.see(self.current_position[0] + i,
-                         self.current_position[1])
-            if self.level_value(self.current_position[0],
-                                self.current_position[1] + i) == ' ':
-                self.see(self.current_position[0],
-                         self.current_position[1] + i)
+        if self.player.level < len(self.visited):
+            self.visit(*self.current_position)
+            for i in (-1, 1):
+                if self.level_value(self.current_position[0] + i,
+                                    self.current_position[1]) == ' ':
+                    self.see(self.current_position[0] + i,
+                             self.current_position[1])
+                if self.level_value(self.current_position[0],
+                                    self.current_position[1] + i) == ' ':
+                    self.see(self.current_position[0],
+                             self.current_position[1] + i)
 
         for y_index, row in enumerate(self.levels[self.player.level]):
             for x_index, value in enumerate(row):
