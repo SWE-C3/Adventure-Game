@@ -64,7 +64,6 @@ if __name__ == '__main__':
         curses.start_color()
         STDSCR.keypad(True)
         STDSCR.refresh()
-        STDSCR.timeout(500)
         initialize(STDSCR)
 
         screen_size = STDSCR.getmaxyx()
