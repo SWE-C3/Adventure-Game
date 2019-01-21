@@ -365,11 +365,13 @@ class GameMap(UserInterface):
             elif self.current_value == 'X':
                 return globals.SAVE_GAME
             elif self.current_value == '=':
-                self.visit(*self.current_position)
+                if self.player.level < len(self.visited):
+                    self.visit(*self.current_position)
                 globals.LADDER.upwards = True
                 return globals.LADDER
             elif self.current_value == '%':
-                self.visit(*self.current_position)
+                if self.player.level < len(self.visited):
+                    self.visit(*self.current_position)
                 globals.LADDER.upwards = False
                 return globals.LADDER
             elif self.current_value == 'O':
