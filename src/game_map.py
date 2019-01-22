@@ -289,36 +289,37 @@ class GameMap(UserInterface):
                                     self.current_position[1] + i) == ' ':
                     self.see(self.current_position[0],
                              self.current_position[1] + i)
-
-        for y_index, row in enumerate(self.levels[self.player.level]):
-            for x_index, value in enumerate(row):
-                if (x_index, y_index) not in self.seen[self.player.level]:
-                    self.map.addstr(y_index, x_index, '#',
-                                    color(foreground=curses.COLOR_BLUE))
-                elif (x_index, y_index) \
-                        not in self.visited[self.player.level] \
-                        and value in ('M', 'O', 'I'):
-                    self.map.addstr(y_index, x_index, constants.UNKNOWN,
-                                    color(foreground=curses.COLOR_MAGENTA))
-                elif value == 'I':
-                    self.map.addstr(y_index, x_index, constants.ITEM,
-                                    color(foreground=curses.COLOR_CYAN))
-                elif value == 'X':
-                    self.map.addstr(y_index, x_index, constants.SAVEPOINT,
-                                    color(foreground=curses.COLOR_BLUE))
-                elif value == '=':
-                    self.map.addstr(y_index, x_index, constants.LADDER_UP,
-                                    color(foreground=curses.COLOR_GREEN))
-                elif value == '%':
-                    self.map.addstr(y_index, x_index, constants.LADDER_DOWN,
-                                    color(foreground=curses.COLOR_GREEN))
-                elif value == 'M':
-                    self.map.addstr(y_index, x_index, constants.MONSTER,
-                                    color(foreground=curses.COLOR_RED))
-                elif value == 'O':
-                    self.map.addstr(y_index, x_index, constants.HOLE)
-                else:
-                    self.map.addstr(y_index, x_index, value)
+        if 0 <= self.player.level < len(self.levels):
+            for y_index, row in enumerate(self.levels[self.player.level]):
+                for x_index, value in enumerate(row):
+                    if (x_index, y_index) not in self.seen[self.player.level]:
+                        self.map.addstr(y_index, x_index, '#',
+                                        color(foreground=curses.COLOR_BLUE))
+                    elif (x_index, y_index) \
+                            not in self.visited[self.player.level] \
+                            and value in ('M', 'O', 'I'):
+                        self.map.addstr(y_index, x_index, constants.UNKNOWN,
+                                        color(foreground=curses.COLOR_MAGENTA))
+                    elif value == 'I':
+                        self.map.addstr(y_index, x_index, constants.ITEM,
+                                        color(foreground=curses.COLOR_CYAN))
+                    elif value == 'X':
+                        self.map.addstr(y_index, x_index, constants.SAVEPOINT,
+                                        color(foreground=curses.COLOR_BLUE))
+                    elif value == '=':
+                        self.map.addstr(y_index, x_index, constants.LADDER_UP,
+                                        color(foreground=curses.COLOR_GREEN))
+                    elif value == '%':
+                        self.map.addstr(y_index, x_index,
+                                        constants.LADDER_DOWN,
+                                        color(foreground=curses.COLOR_GREEN))
+                    elif value == 'M':
+                        self.map.addstr(y_index, x_index, constants.MONSTER,
+                                        color(foreground=curses.COLOR_RED))
+                    elif value == 'O':
+                        self.map.addstr(y_index, x_index, constants.HOLE)
+                    else:
+                        self.map.addstr(y_index, x_index, value)
 
         self.map.addstr(self.current_position[1], self.current_position[0],
                         constants.PLAYER, color(foreground=curses.COLOR_YELLOW))
@@ -411,10 +412,7 @@ class LadderDialog(Dialog):
             if self.upwards:
                 globals.MAP.log_event('Du bist eine Leiter hinaufgestiegen')
                 globals.MAP.player.position.level += 1
-                if globals.MAP.player.level == 10:
-                    globals.STORY.text = globals.STORY.stories['outro']
-                    return globals.STORY
-                elif globals.MAP.player.level not in globals.MAP.stories_shown:
+                if globals.MAP.player.level not in globals.MAP.stories_shown:
                     globals.MAP.stories_shown.add(globals.MAP.player.level)
                     globals.STORY.text = \
                         globals.STORY.stories[str(globals.MAP.player.level)]
