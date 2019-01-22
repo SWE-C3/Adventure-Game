@@ -322,7 +322,8 @@ class GameMap(UserInterface):
                         self.map.addstr(y_index, x_index, value)
 
         self.map.addstr(self.current_position[1], self.current_position[0],
-                        constants.PLAYER, color(foreground=curses.COLOR_YELLOW))
+                        constants.PLAYER,
+                        color(foreground=curses.COLOR_YELLOW))
 
         self.status_info.addstr(1, 2, "HP: ")
         self.status_info.addstr(1, 6, 10 * ' ',
@@ -331,7 +332,8 @@ class GameMap(UserInterface):
                                 color(foreground=curses.COLOR_RED))
 
         self.status_info.addstr(1, 17,
-                                f'{self.player.current_health:3}/{self.player.max_health:3}')
+                                f'{self.player.current_health:3}/'
+                                f'{self.player.max_health:3}')
         self.status_info.addstr(1, 27, f"Staerke: {self.player.strength}")
 
         self.refresh()
@@ -497,7 +499,7 @@ class MonsterDialog(Dialog):
                 random.choice((Consumable, Equipment,
                                Weapon))(player.level + 1)
         else:
-            damage = int(player.strength/monster.strength * player.strength)
+            damage = int(player.strength / monster.strength * player.strength)
             self.question += '\nUnd das Monster besiegt dich...'
             self.question += f'\nDu hast {damage} Schaden ausgeteilt'
             globals.MAP.log_event(f'{monster.name.title()} '
@@ -564,8 +566,8 @@ class ItemDialog(Dialog):
             other_item = globals.MAP.player.cookies[0]
         if other_item:
             self.question += f'\nDu hast bereits diesen Gegenstand:\n' \
-            f'Name: {other_item}\n' \
-            f'Staerke: {other_item.factor}'
+                f'Name: {other_item}\n' \
+                f'Staerke: {other_item.factor}'
             self.options[0] = '[J] Austauschen'
         self.setup()
 
