@@ -70,10 +70,8 @@ class StoryScreen(UserInterface):
 
     def handle(self, key: int, previous):
         if key == constants.ENTER:
-            if self.text == self.stories['outro']:
-                self.text = ''
+            if globals.MAP.player.level == 10:
                 return globals.MAIN
-            self.text = ''
             return globals.MAP
         elif key in (constants.DOWN, ord('s')):
             self.upper += 1
