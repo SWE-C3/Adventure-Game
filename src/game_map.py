@@ -112,15 +112,17 @@ class GameMap(UserInterface):
             logging.info(pformat(data))
             json.dump(data, file, default=lambda x: vars(x))
 
-    def load_game(self, filename: str):
+    @classmethod
+    def load_game(cls, filename: str):
         with (Path(__file__).parent.parent / filename).open() as file:
             data = json.load(file)
+        game_map = cls()
         for position, monster_data in data['monsters'].items():
             position = tuple(int(i) for i in position[1:-1].split(', '))
             monster = Monster(1)
             monster.strength = monster_data['strength']
             monster.name = monster_data['name']
-            self.monsters[position] = monster
+            game_map.monsters[position] = monster
         for position, item_data in data['items'].items():
             position = tuple(int(i) for i in position[1:-1].split(', '))
             item = Consumable(1) if item_data['type'] == 'Keks' \
@@ -128,59 +130,60 @@ class GameMap(UserInterface):
             item.name = item_data['name']
             item.factor = item_data['factor']
             item.type = item_data['type']
-            self.items[position] = item
-        self.starting_positions = [tuple(position) for position in
-                                   data['starting_positions']]
-        self.levels = data['levels']
+            game_map.items[position] = item
+        game_map.starting_positions = [tuple(position) for position in
+                                       data['starting_positions']]
+        game_map.levels = data['levels']
         head = data['player_items']['head']
         chest = data['player_items']['chest']
         legs = data['player_items']['legs']
         feet = data['player_items']['feet']
         weapon = data['player_items']['weapon']
         cookies = data['player_items']['cookies']
-        self.player.head = head if not head else Equipment(1)
+        game_map.player.head = head if not head else Equipment(1)
         if head:
-            self.player.head.factor = head['factor']
-            self.player.head.name = head['name']
-            self.player.head.type = head['type']
-        self.player.chest = chest if not chest else Equipment(1)
+            game_map.player.head.factor = head['factor']
+            game_map.player.head.name = head['name']
+            game_map.player.head.type = head['type']
+        game_map.player.chest = chest if not chest else Equipment(1)
         if chest:
-            self.player.chest.factor = chest['factor']
-            self.player.chest.name = chest['name']
-            self.player.chest.type = chest['type']
-        self.player.legs = legs if not legs else Equipment(1)
+            game_map.player.chest.factor = chest['factor']
+            game_map.player.chest.name = chest['name']
+            game_map.player.chest.type = chest['type']
+        game_map.player.legs = legs if not legs else Equipment(1)
         if legs:
-            self.player.legs.factor = legs['factor']
-            self.player.legs.name = legs['name']
-            self.player.legs.type = legs['type']
-        self.player.feet = feet if not feet else Equipment(1)
+            game_map.player.legs.factor = legs['factor']
+            game_map.player.legs.name = legs['name']
+            game_map.player.legs.type = legs['type']
+        game_map.player.feet = feet if not feet else Equipment(1)
         if feet:
-            self.player.feet.factor = feet['factor']
-            self.player.feet.name = feet['name']
-            self.player.feet.type = feet['type']
-        self.player.weapon = weapon if not weapon else Weapon(1)
+            game_map.player.feet.factor = feet['factor']
+            game_map.player.feet.name = feet['name']
+            game_map.player.feet.type = feet['type']
+        game_map.player.weapon = weapon if not weapon else Weapon(1)
         if weapon:
-            self.player.weapon.factor = weapon['factor']
-            self.player.weapon.name = weapon['name']
-            self.player.weapon.type = weapon['type']
-        self.player.cookies = list()
+            game_map.player.weapon.factor = weapon['factor']
+            game_map.player.weapon.name = weapon['name']
+            game_map.player.weapon.type = weapon['type']
+        game_map.player.cookies = list()
         for cookie_data in cookies:
             cookie = Consumable(1)
             cookie.factor = cookie_data['factor']
             cookie.name = cookie_data['name']
             cookie.type = cookie_data['type']
-            self.player.cookies.append(cookie)
-        self.player.position._level = data['level']
-        self.player.damage = data['damage']
-        self._last_position = (data['last_position'][0],
-                               data['last_position'][1])
-        self.player.position._x = data['current_position'][0]
-        self.player.position._y = data['current_position'][1]
-        self.visited = [set(tuple(position) for position in level) for level in
-                        data['visited']]
-        self.seen = [set(tuple(position) for position in level) for level in
-                     data['seen']]
-        self.stories_shown = set(data['stories_shown'])
+            game_map.player.cookies.append(cookie)
+        game_map.player.position._level = data['level']
+        game_map.player.damage = data['damage']
+        game_map._last_position = (data['last_position'][0],
+                                   data['last_position'][1])
+        game_map.player.position._x = data['current_position'][0]
+        game_map.player.position._y = data['current_position'][1]
+        game_map.visited = [set(tuple(position) for position in level) for
+                            level in data['visited']]
+        game_map.seen = [set(tuple(position) for position in level) for level
+                         in data['seen']]
+        game_map.stories_shown = set(data['stories_shown'])
+        return game_map
 
     def parse_level(self, level: str, level_number: int) -> List[List[str]]:
         level = level.replace('-', constants.HORIZONTAL)

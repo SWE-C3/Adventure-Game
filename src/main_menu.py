@@ -87,7 +87,7 @@ class MainMenu(UserInterface):
         if key == ord('n'):
             return globals.NEW_GAME
         elif key == ord('f'):
-            globals.MAP.load_game('savegame.json')
+            globals.MAP = GameMap.load_game('savegame.json')
             return globals.MAP
         elif key == ord('q'):
             return globals.QUIT_GAME
