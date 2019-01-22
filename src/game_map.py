@@ -112,15 +112,17 @@ class GameMap(UserInterface):
             logging.info(pformat(data))
             json.dump(data, file, default=lambda x: vars(x))
 
-    def load_game(self, filename: str):
+    @classmethod
+    def load_game(cls, filename: str):
         with (Path(__file__).parent.parent / filename).open() as file:
             data = json.load(file)
+        game_map = cls()
         for position, monster_data in data['monsters'].items():
             position = tuple(int(i) for i in position[1:-1].split(', '))
             monster = Monster(1)
             monster.strength = monster_data['strength']
             monster.name = monster_data['name']
-            self.monsters[position] = monster
+            game_map.monsters[position] = monster
         for position, item_data in data['items'].items():
             position = tuple(int(i) for i in position[1:-1].split(', '))
             item = Consumable(1) if item_data['type'] == 'Keks' \
@@ -128,59 +130,60 @@ class GameMap(UserInterface):
             item.name = item_data['name']
             item.factor = item_data['factor']
             item.type = item_data['type']
-            self.items[position] = item
-        self.starting_positions = [tuple(position) for position in
-                                   data['starting_positions']]
-        self.levels = data['levels']
+            game_map.items[position] = item
+        game_map.starting_positions = [tuple(position) for position in
+                                       data['starting_positions']]
+        game_map.levels = data['levels']
         head = data['player_items']['head']
         chest = data['player_items']['chest']
         legs = data['player_items']['legs']
         feet = data['player_items']['feet']
         weapon = data['player_items']['weapon']
         cookies = data['player_items']['cookies']
-        self.player.head = head if not head else Equipment(1)
+        game_map.player.head = head if not head else Equipment(1)
         if head:
-            self.player.head.factor = head['factor']
-            self.player.head.name = head['name']
-            self.player.head.type = head['type']
-        self.player.chest = chest if not chest else Equipment(1)
+            game_map.player.head.factor = head['factor']
+            game_map.player.head.name = head['name']
+            game_map.player.head.type = head['type']
+        game_map.player.chest = chest if not chest else Equipment(1)
         if chest:
-            self.player.chest.factor = chest['factor']
-            self.player.chest.name = chest['name']
-            self.player.chest.type = chest['type']
-        self.player.legs = legs if not legs else Equipment(1)
+            game_map.player.chest.factor = chest['factor']
+            game_map.player.chest.name = chest['name']
+            game_map.player.chest.type = chest['type']
+        game_map.player.legs = legs if not legs else Equipment(1)
         if legs:
-            self.player.legs.factor = legs['factor']
-            self.player.legs.name = legs['name']
-            self.player.legs.type = legs['type']
-        self.player.feet = feet if not feet else Equipment(1)
+            game_map.player.legs.factor = legs['factor']
+            game_map.player.legs.name = legs['name']
+            game_map.player.legs.type = legs['type']
+        game_map.player.feet = feet if not feet else Equipment(1)
         if feet:
-            self.player.feet.factor = feet['factor']
-            self.player.feet.name = feet['name']
-            self.player.feet.type = feet['type']
-        self.player.weapon = weapon if not weapon else Weapon(1)
+            game_map.player.feet.factor = feet['factor']
+            game_map.player.feet.name = feet['name']
+            game_map.player.feet.type = feet['type']
+        game_map.player.weapon = weapon if not weapon else Weapon(1)
         if weapon:
-            self.player.weapon.factor = weapon['factor']
-            self.player.weapon.name = weapon['name']
-            self.player.weapon.type = weapon['type']
-        self.player.cookies = list()
+            game_map.player.weapon.factor = weapon['factor']
+            game_map.player.weapon.name = weapon['name']
+            game_map.player.weapon.type = weapon['type']
+        game_map.player.cookies = list()
         for cookie_data in cookies:
             cookie = Consumable(1)
             cookie.factor = cookie_data['factor']
             cookie.name = cookie_data['name']
             cookie.type = cookie_data['type']
-            self.player.cookies.append(cookie)
-        self.player.position._level = data['level']
-        self.player.damage = data['damage']
-        self._last_position = (data['last_position'][0],
-                               data['last_position'][1])
-        self.player.position._x = data['current_position'][0]
-        self.player.position._y = data['current_position'][1]
-        self.visited = [set(tuple(position) for position in level) for level in
-                        data['visited']]
-        self.seen = [set(tuple(position) for position in level) for level in
-                     data['seen']]
-        self.stories_shown = set(data['stories_shown'])
+            game_map.player.cookies.append(cookie)
+        game_map.player.position._level = data['level']
+        game_map.player.damage = data['damage']
+        game_map._last_position = (data['last_position'][0],
+                                   data['last_position'][1])
+        game_map.player.position._x = data['current_position'][0]
+        game_map.player.position._y = data['current_position'][1]
+        game_map.visited = [set(tuple(position) for position in level) for
+                            level in data['visited']]
+        game_map.seen = [set(tuple(position) for position in level) for level
+                         in data['seen']]
+        game_map.stories_shown = set(data['stories_shown'])
+        return game_map
 
     def parse_level(self, level: str, level_number: int) -> List[List[str]]:
         level = level.replace('-', constants.HORIZONTAL)
@@ -278,49 +281,52 @@ class GameMap(UserInterface):
         self.screen.addstr(1, 3, f"Ebene {self.player.level}")
         self.screen.addstr(1, 20, f'Position: {self.current_position}')
 
-        self.visit(*self.current_position)
-        for i in (-1, 1):
-            if self.level_value(self.current_position[0] + i,
-                                self.current_position[1]) == ' ':
-                self.see(self.current_position[0] + i,
-                         self.current_position[1])
-            if self.level_value(self.current_position[0],
-                                self.current_position[1] + i) == ' ':
-                self.see(self.current_position[0],
-                         self.current_position[1] + i)
-
-        for y_index, row in enumerate(self.levels[self.player.level]):
-            for x_index, value in enumerate(row):
-                if (x_index, y_index) not in self.seen[self.player.level]:
-                    self.map.addstr(y_index, x_index, '#',
-                                    color(foreground=curses.COLOR_BLUE))
-                elif (x_index, y_index) \
-                        not in self.visited[self.player.level] \
-                        and value in ('M', 'O', 'I'):
-                    self.map.addstr(y_index, x_index, constants.UNKNOWN,
-                                    color(foreground=curses.COLOR_MAGENTA))
-                elif value == 'I':
-                    self.map.addstr(y_index, x_index, constants.ITEM,
-                                    color(foreground=curses.COLOR_CYAN))
-                elif value == 'X':
-                    self.map.addstr(y_index, x_index, constants.SAVEPOINT,
-                                    color(foreground=curses.COLOR_BLUE))
-                elif value == '=':
-                    self.map.addstr(y_index, x_index, constants.LADDER_UP,
-                                    color(foreground=curses.COLOR_GREEN))
-                elif value == '%':
-                    self.map.addstr(y_index, x_index, constants.LADDER_DOWN,
-                                    color(foreground=curses.COLOR_GREEN))
-                elif value == 'M':
-                    self.map.addstr(y_index, x_index, constants.MONSTER,
-                                    color(foreground=curses.COLOR_RED))
-                elif value == 'O':
-                    self.map.addstr(y_index, x_index, constants.HOLE)
-                else:
-                    self.map.addstr(y_index, x_index, value)
+        if self.player.level < len(self.visited):
+            self.visit(*self.current_position)
+            for i in (-1, 1):
+                if self.level_value(self.current_position[0] + i,
+                                    self.current_position[1]) == ' ':
+                    self.see(self.current_position[0] + i,
+                             self.current_position[1])
+                if self.level_value(self.current_position[0],
+                                    self.current_position[1] + i) == ' ':
+                    self.see(self.current_position[0],
+                             self.current_position[1] + i)
+        if 0 <= self.player.level < len(self.levels):
+            for y_index, row in enumerate(self.levels[self.player.level]):
+                for x_index, value in enumerate(row):
+                    if (x_index, y_index) not in self.seen[self.player.level]:
+                        self.map.addstr(y_index, x_index, '#',
+                                        color(foreground=curses.COLOR_BLUE))
+                    elif (x_index, y_index) \
+                            not in self.visited[self.player.level] \
+                            and value in ('M', 'O', 'I'):
+                        self.map.addstr(y_index, x_index, constants.UNKNOWN,
+                                        color(foreground=curses.COLOR_MAGENTA))
+                    elif value == 'I':
+                        self.map.addstr(y_index, x_index, constants.ITEM,
+                                        color(foreground=curses.COLOR_CYAN))
+                    elif value == 'X':
+                        self.map.addstr(y_index, x_index, constants.SAVEPOINT,
+                                        color(foreground=curses.COLOR_BLUE))
+                    elif value == '=':
+                        self.map.addstr(y_index, x_index, constants.LADDER_UP,
+                                        color(foreground=curses.COLOR_GREEN))
+                    elif value == '%':
+                        self.map.addstr(y_index, x_index,
+                                        constants.LADDER_DOWN,
+                                        color(foreground=curses.COLOR_GREEN))
+                    elif value == 'M':
+                        self.map.addstr(y_index, x_index, constants.MONSTER,
+                                        color(foreground=curses.COLOR_RED))
+                    elif value == 'O':
+                        self.map.addstr(y_index, x_index, constants.HOLE)
+                    else:
+                        self.map.addstr(y_index, x_index, value)
 
         self.map.addstr(self.current_position[1], self.current_position[0],
-                        constants.PLAYER, color(foreground=curses.COLOR_YELLOW))
+                        constants.PLAYER,
+                        color(foreground=curses.COLOR_YELLOW))
 
         self.status_info.addstr(1, 2, "HP: ")
         self.status_info.addstr(1, 6, 10 * ' ',
@@ -329,7 +335,8 @@ class GameMap(UserInterface):
                                 color(foreground=curses.COLOR_RED))
 
         self.status_info.addstr(1, 17,
-                                f'{self.player.current_health:3}/{self.player.max_health:3}')
+                                f'{self.player.current_health:3}/'
+                                f'{self.player.max_health:3}')
         self.status_info.addstr(1, 27, f"Staerke: {self.player.strength}")
 
         self.refresh()
@@ -365,17 +372,20 @@ class GameMap(UserInterface):
             elif self.current_value == 'X':
                 return globals.SAVE_GAME
             elif self.current_value == '=':
-                self.visit(*self.current_position)
+                if self.player.level < len(self.visited):
+                    self.visit(*self.current_position)
                 globals.LADDER.upwards = True
                 return globals.LADDER
             elif self.current_value == '%':
-                self.visit(*self.current_position)
+                if self.player.level < len(self.visited):
+                    self.visit(*self.current_position)
                 globals.LADDER.upwards = False
                 return globals.LADDER
             elif self.current_value == 'O':
-                self.visit(*self.current_position)
-                self.log_event('Du bist durch ein Loch gefallen')
-                self.player.position.level -= 1
+                if 0 <= self.player.level < len(self.visited):
+                    self.visit(*self.current_position)
+                    self.log_event('Du bist durch ein Loch gefallen')
+                    self.player.position.level -= 1
         return self
 
 
@@ -407,10 +417,7 @@ class LadderDialog(Dialog):
             if self.upwards:
                 globals.MAP.log_event('Du bist eine Leiter hinaufgestiegen')
                 globals.MAP.player.position.level += 1
-                if globals.MAP.player.level == 10:
-                    globals.STORY.text = globals.STORY.stories['outro']
-                    return globals.STORY
-                elif globals.MAP.player.level not in globals.MAP.stories_shown:
+                if globals.MAP.player.level not in globals.MAP.stories_shown:
                     globals.MAP.stories_shown.add(globals.MAP.player.level)
                     globals.STORY.text = \
                         globals.STORY.stories[str(globals.MAP.player.level)]
@@ -495,7 +502,7 @@ class MonsterDialog(Dialog):
                 random.choice((Consumable, Equipment,
                                Weapon))(player.level + 1)
         else:
-            damage = int(player.strength/monster.strength * player.strength)
+            damage = int(player.strength / monster.strength * player.strength)
             self.question += '\nUnd das Monster besiegt dich...'
             self.question += f'\nDu hast {damage} Schaden ausgeteilt'
             globals.MAP.log_event(f'{monster.name.title()} '
@@ -562,8 +569,8 @@ class ItemDialog(Dialog):
             other_item = globals.MAP.player.cookies[0]
         if other_item:
             self.question += f'\nDu hast bereits diesen Gegenstand:\n' \
-            f'Name: {other_item}\n' \
-            f'Staerke: {other_item.factor}'
+                f'Name: {other_item}\n' \
+                f'Staerke: {other_item.factor}'
             self.options[0] = '[J] Austauschen'
         self.setup()
 
